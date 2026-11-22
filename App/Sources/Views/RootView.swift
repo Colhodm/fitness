@@ -71,7 +71,7 @@ struct RootView: View {
             DebugLaunch.apply(router: router, context: context)
             #endif
         }
-        .onChange(of: manual.count) { _, _ in
+        .onChange(of: manual.map(\.savedToHealth)) { _, _ in
             health.setManual(manual)
             Task { await health.refresh() }
         }
