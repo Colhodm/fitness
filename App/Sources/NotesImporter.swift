@@ -9,6 +9,9 @@ enum NotesImporter {
         var seconds: Int?
         var isDistance = false
         var atWeight: Double?
+        /// Explicit unit written in the note ("kg"/"lb", "m"/"yd"/"ft"); nil means use the app's units.
+        var weightUnit: WeightUnit?
+        var metersPerUnit: Double?
     }
 
     struct Line: Identifiable, Hashable {
@@ -93,6 +96,14 @@ enum NotesImporter {
     }
 
     static func token(_ p: String) -> Token? {
+        let lower = p.lowercased()
+        let unit: WeightUnit? = lower.contains("kg") ? .kg : (lower.contains("lb") ? .lb : nil)
+        guard var t = rawToken(p) else { return nil }
+        t.weightUnit = unit
+        return t
+    }
+
+    private static func rawToken(_ p: String) -> Token? {
         let s = p.replacingOccurrences(of: "×", with: "x").replacingOccurrences(of: "*", with: "x").replacingOccurrences(of: " ", with: "")
             .replacingOccurrences(of: "lbs", with: "").replacingOccurrences(of: "lb", with: "").replacingOccurrences(of: "kg", with: "")
         if let r = s.firstMatch(of: /^(\d+)x(\d+)@(\d+(?:\.\d+)?)$/) {
@@ -106,6 +117,7 @@ enum NotesImporter {
             if let b = r.3 { nums.append(Double(b)!) }
             if let c = r.4 { nums.append(Double(c)!) }
             var t = Token(numbers: nums, added: r.1 != nil, isDistance: r.5 != nil)
+            if let u = r.5 { t.metersPerUnit = u == "m" ? 1 : Units.metersPerYard }
             if let u = r.5, u == "ft", nums.count > 1 { t.numbers[1] = nums[1] / 3 }
             return t
         }
@@ -124,7 +136,13 @@ enum NotesImporter {
                 continue
             }
             let n = t.numbers
-            func wt(_ v: Double) -> Double { Units.pounds(fromDisplay: v) }
+            func wt(_ v: Double) -> Double {
+                switch t.weightUnit {
+                case .kg: v * 2.2046226218
+                case .lb: v
+                case nil: Units.pounds(fromDisplay: v)
+                }
+            }
             switch kind {
             case .weightReps, .assisted:
                 if n.count == 1 {
@@ -147,7 +165,7 @@ enum NotesImporter {
             case .distanceWeight:
                 if n.count >= 2 {
                     let count = n.count > 2 ? Int(n[2]) : 1
-                    for _ in 0..<max(1, min(count, 20)) { out.append(ParsedSet(weight: wt(n[0]), reps: 1, distance: n[1] * distUnit)) }
+                    for _ in 0..<max(1, min(count, 20)) { out.append(ParsedSet(weight: wt(n[0]), reps: 1, distance: n[1] * (t.metersPerUnit ?? distUnit))) }
                 }
             }
         }
