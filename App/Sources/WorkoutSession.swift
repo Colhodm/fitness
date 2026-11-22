@@ -342,7 +342,8 @@ final class WorkoutSession: ObservableObject {
             }()
             item.order = i
             item.sets = p.sets
-            item.targetSeconds = p.targetSeconds
+            // Keep a target already advanced at Finish (advanceTimedTargets).
+            item.targetSeconds = max(item.targetSeconds, p.targetSeconds)
             item.targetDistance = p.targetDistance
             item.supersetGroup = p.supersetGroup
         }
