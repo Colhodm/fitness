@@ -18,6 +18,8 @@ final class WorkoutSession: ObservableObject {
     let rest = RestTimer.shared
     private(set) var context: ModelContext?
     private var priorCache: [PersistentIdentifier: [Session]] = [:]
+    /// The workout's exercise list as it stood at Finish (before unlogged sets/entries are dropped), used by "Update routine".
+    private var finishedPlan: [(exercise: Exercise, sets: Int, supersetGroup: Int, targetSeconds: Int, targetDistance: Double)] = []
 
     init() {
         rest.onChange = { [weak self] in self?.pushLiveActivity() }
@@ -267,6 +269,9 @@ final class WorkoutSession: ObservableObject {
         guard let w = workout, let context else { return }
         rest.skip()
         w.endedAt = Date()
+        finishedPlan = w.sortedEntries.compactMap { e in
+            e.exercise.map { ($0, max(1, e.workingSets.count), e.supersetGroup, e.targetSeconds, e.targetDistance) }
+        }
         for e in w.entries {
             for s in e.sets where !s.done { context.delete(s) }
         }
@@ -307,20 +312,27 @@ final class WorkoutSession: ObservableObject {
     /// Makes the routine match what was done today (exercise order and set counts).
     func updateRoutine(from w: Workout) {
         guard let routine = w.routine, let context else { return }
+        let plan = finishedPlan.isEmpty
+            ? w.sortedEntries.compactMap { e in e.exercise.map { ($0, max(1, e.workingSets.count), e.supersetGroup, e.targetSeconds, e.targetDistance) } }
+            : finishedPlan
         let existing = routine.items
-        for (i, e) in w.sortedEntries.enumerated() {
-            guard let ex = e.exercise else { continue }
-            let item = existing.first { $0.exercise === ex } ?? {
-                let ri = RoutineItem(order: i, exercise: ex, sets: e.targetSets, repLow: e.repLow, repHigh: e.repHigh, restSeconds: e.restSeconds, increment: e.increment)
+        for item in existing where !plan.contains(where: { $0.exercise === item.exercise }) {
+            context.delete(item)
+        }
+        for (i, p) in plan.enumerated() {
+            let e = w.entries.first { $0.exercise === p.exercise }
+            let item = existing.first { $0.exercise === p.exercise } ?? {
+                let ri = RoutineItem(order: i, exercise: p.exercise, sets: p.sets, repLow: e?.repLow ?? 8, repHigh: e?.repHigh ?? 12,
+                                     restSeconds: e?.restSeconds ?? AppSettings.shared.defaultRest, increment: e?.increment ?? AppSettings.shared.upperIncrement)
                 ri.routine = routine
                 context.insert(ri)
                 return ri
             }()
             item.order = i
-            item.sets = max(1, e.workingSets.count)
-            item.targetSeconds = e.targetSeconds
-            item.targetDistance = e.targetDistance
-            item.supersetGroup = e.supersetGroup
+            item.sets = p.sets
+            item.targetSeconds = p.targetSeconds
+            item.targetDistance = p.targetDistance
+            item.supersetGroup = p.supersetGroup
         }
         save()
     }

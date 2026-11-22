@@ -40,7 +40,7 @@ struct WorkoutSummaryView: View {
                 }
                 HStack(spacing: 8) {
                     tile("Volume", Fmt.num(Units.display(workout.volume), maxDecimals: 0), Units.unitLabel, hot: false)
-                    tile("Sets", "\(workout.completedSets.count)", "\(workout.entries.count) exercises", hot: false)
+                    tile("Sets", "\(workout.completedSets.count)", "\(workout.entries.count) \(workout.entries.count == 1 ? "exercise" : "exercises")", hot: false)
                     tile("PRs", "\(prs.count)", prs.count == 1 ? "new best" : "new bests", hot: !prs.isEmpty)
                 }
                 if !prs.isEmpty {

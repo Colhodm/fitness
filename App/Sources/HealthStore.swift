@@ -86,16 +86,21 @@ final class HealthStore: ObservableObject {
         return access == .requested
     }
 
-    func requestAccess() async {
-        guard HKHealthStore.isHealthDataAvailable() else { access = .unavailable; return }
+    /// Returns false when the request itself failed (e.g. missing HealthKit entitlement), so callers can show an error.
+    @discardableResult
+    func requestAccess() async -> Bool {
+        guard HKHealthStore.isHealthDataAvailable() else { access = .unavailable; return false }
+        var ok = true
         do {
             try await store.requestAuthorization(toShare: shareTypes, read: readTypes)
             AppGroup.defaults.set(true, forKey: "healthRequested")
             access = .requested
         } catch {
             print("Health authorization failed: \(error)")
+            ok = false
         }
         await refresh()
+        return ok
     }
 
     func setManual(_ entries: [ManualWeighIn]) {

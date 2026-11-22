@@ -79,6 +79,7 @@ struct TrendWeightWidget: Widget {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .foregroundStyle(.white)
             .containerBackground(Palette.card, for: .widget)
             .widgetURL(URL(string: "liftrunbody://body"))
         }
@@ -102,6 +103,7 @@ struct NextUpWidget: Widget {
                     .frame(maxWidth: .infinity).frame(height: 34).background(Palette.orange, in: Capsule())
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .foregroundStyle(.white)
             .containerBackground(Palette.card, for: .widget)
             .widgetURL(URL(string: e.snap.nextRoutineID.map { "liftrunbody://start/\($0)" } ?? "liftrunbody://today"))
         }
@@ -125,6 +127,7 @@ struct ThisWeekWidget: Widget {
                 bar("Lifting", "\(s.liftingDone)", "/ \(s.liftingGoal)", Double(s.liftingDone) / Double(max(1, s.liftingGoal)), Palette.orange)
                 bar("Running", fmt(s.runDistance), "/ \(Int(s.runGoal)) \(s.distanceUnit)", s.runDistance / max(1, s.runGoal), Palette.cyan)
             }
+            .foregroundStyle(.white)
             .containerBackground(Palette.card, for: .widget)
             .widgetURL(URL(string: "liftrunbody://today"))
         }

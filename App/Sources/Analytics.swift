@@ -239,8 +239,12 @@ enum Analytics {
             } else {
                 p.weight = working
                 p.reps = (0..<max(1, c.sets)).map { i in i < sets.count ? sets[i].reps : (sets.last?.reps ?? c.repLow) }
-                let under = counted - atTop
-                p.reason = "\(under) of \(counted) sets under \(c.repHigh)"
+                let logged = atWorking.count
+                if logged < c.sets {
+                    p.reason = "\(logged) of \(c.sets) sets logged"
+                } else {
+                    p.reason = "\(counted - atTop) of \(counted) sets under \(c.repHigh)"
+                }
             }
         case .timed:
             let target = c.targetSeconds > 0 ? c.targetSeconds : (sets.map(\.seconds).min() ?? 30)

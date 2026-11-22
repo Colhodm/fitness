@@ -5,6 +5,7 @@ struct OnboardingView: View {
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var health: HealthStore
     @State private var step = 1
+    @State private var healthFailed = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -17,11 +18,20 @@ struct OnboardingView: View {
             Spacer()
             PrimaryButton(title: step == 2 && !health.isConnected ? "Connect Apple Health" : (step == 3 ? "Start lifting" : "Continue"),
                           tint: step == 2 ? Palette.cyan : Palette.orange) {
-                if step == 2 && !health.isConnected { Task { await health.requestAccess() } }
+                if step == 2 && !health.isConnected {
+                    Task {
+                        healthFailed = !(await health.requestAccess())
+                        if !healthFailed { step = 3 }
+                    }
+                }
                 else if step < 3 { step += 1 } else { settings.onboardingDone = true }
             }
-            if step == 2 {
-                Button(health.isConnected ? "Continue" : "Skip for now") { step = 3 }
+            if step == 2 && healthFailed {
+                Text("Couldn't connect to Apple Health. You can turn it on later in Settings.")
+                    .font(.system(size: 13)).foregroundStyle(Palette.secondary).frame(maxWidth: .infinity)
+            }
+            if step == 2 && !health.isConnected {
+                Button("Skip for now") { step = 3 }
                     .font(.system(size: 15, weight: .semibold)).foregroundStyle(Palette.cyan).frame(maxWidth: .infinity)
             }
         }
@@ -169,7 +179,7 @@ struct ImportNotesView: View {
                 }
                 Text("New names are remembered, so \"\(names.first { mapping[$0.lowercased()] == nil } ?? names.first ?? "")\" maps automatically next time.")
                     .font(.system(size: 13)).foregroundStyle(Palette.secondary)
-                PrimaryButton(title: imported != nil ? "Imported \(imported!) workouts" : "Import \(total) sets") {
+                PrimaryButton(title: imported != nil ? "Imported \(imported!) \(imported! == 1 ? "set" : "sets")" : "Import \(total) sets") {
                     for raw in names { if let ex = mapping[raw.lowercased()] { NotesImporter.remember(alias: raw, for: ex) } }
                     imported = NotesImporter.importWorkouts(workouts, mapping: mapping, into: context)
                     WidgetSync.shared.refresh()
