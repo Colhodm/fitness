@@ -73,13 +73,14 @@ struct TodayView: View {
         let miles = runs.reduce(0) { $0 + Units.runDisplay($1.meters) }
         let runTime = runs.reduce(0) { $0 + $1.duration }
         let prs = week.reduce(0) { $0 + Analytics.workoutPRs($1).count }
+        let runGoal = settings.unit == .lb ? settings.weeklyRunGoal : settings.weeklyRunGoal * 1.609344
         return Card {
             CardTitle(title: "This week", trailing: Fmt.weekRange(start))
             VStack(spacing: 14) {
                 goalRow("Lifting", value: "\(week.count)", goal: "/ \(settings.weeklyLiftGoal) sessions",
                         progress: Double(week.count) / Double(max(1, settings.weeklyLiftGoal)), tint: Palette.orange)
-                goalRow("Running", value: Fmt.fixed(miles, 1), goal: "/ \(Fmt.num(settings.weeklyRunGoal)) \(Units.runLabel)",
-                        progress: miles / max(1, settings.weeklyRunGoal), tint: Palette.cyan)
+                goalRow("Running", value: Fmt.fixed(miles, 1), goal: "/ \(Fmt.num(runGoal, maxDecimals: 0)) \(Units.runLabel)",
+                        progress: miles / max(1, runGoal), tint: Palette.cyan)
             }
             .padding(.top, 14)
             HStack {
