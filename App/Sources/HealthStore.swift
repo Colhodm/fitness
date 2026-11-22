@@ -199,7 +199,7 @@ final class HealthStore: ObservableObject {
         if points.count > 1 {
             detail.splits = Self.splits(route: points, hr: hr)
         } else {
-            let distances = await distanceSamples(start: workout.startDate, end: workout.endDate)
+            let distances = await distanceSamples(for: workout)
             detail.splits = Self.splits(cumulative: distances, hr: hr)
         }
         if !hr.isEmpty { detail.avgHR = hr.map(\.1).reduce(0, +) / Double(hr.count) }
@@ -235,9 +235,15 @@ final class HealthStore: ObservableObject {
         return ((try? await d.result(for: store)) ?? []).map { ($0.startDate, $0.quantity.doubleValue(for: bpm)) }
     }
 
-    private func distanceSamples(start: Date, end: Date) async -> [(Date, Double)] {
+    /// Distance samples from the device that recorded the workout only, so phone + watch samples aren't summed.
+    private func distanceSamples(for workout: HKWorkout) async -> [(Date, Double)] {
+        let start = workout.startDate
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            HKQuery.predicateForSamples(withStart: start, end: workout.endDate, options: .strictStartDate),
+            HKQuery.predicateForObjects(from: workout.sourceRevision.source),
+        ])
         let d = HKSampleQueryDescriptor(
-            predicates: [.quantitySample(type: HKQuantityType(.distanceWalkingRunning), predicate: HKQuery.predicateForSamples(withStart: start, end: end))],
+            predicates: [.quantitySample(type: HKQuantityType(.distanceWalkingRunning), predicate: predicate)],
             sortDescriptors: [SortDescriptor(\.startDate)])
         var total = 0.0
         var out: [(Date, Double)] = [(start, 0)]
