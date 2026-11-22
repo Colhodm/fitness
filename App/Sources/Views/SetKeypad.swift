@@ -201,7 +201,8 @@ struct SetKeypad: View {
     private func next() {
         if target.field == fields.0 { switchTo(fields.1); return }
         session.log(rec)
-        if let e = entry, let open = e.sortedSets.first(where: { !$0.done }) {
+        let nextEntry = session.workout?.sortedEntries.first { $0.persistentModelID == session.expanded } ?? entry
+        if let e = nextEntry, let open = e.sortedSets.first(where: { !$0.done }) {
             onChange(KeypadTarget(set: open, field: fields.0))
         } else {
             onClose()
