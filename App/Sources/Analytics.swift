@@ -247,8 +247,7 @@ enum Analytics {
                 }
             }
         case .timed:
-            let lastTarget = max(c.targetSeconds, last.entry.targetSeconds)
-            let target = lastTarget > 0 ? lastTarget : (sets.map(\.seconds).min() ?? 30)
+            let target = c.targetSeconds > 0 ? c.targetSeconds : (sets.map(\.seconds).min() ?? 30)
             let held = sets.filter { $0.seconds >= target }.count
             p.setsAtTop = held; p.setsCounted = max(c.sets, sets.count)
             p.weight = last.topWeight

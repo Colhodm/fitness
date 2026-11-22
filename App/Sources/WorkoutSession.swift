@@ -276,6 +276,7 @@ final class WorkoutSession: ObservableObject {
             for s in e.sets where !s.done { context.delete(s) }
         }
         for e in w.entries where !e.sets.contains(where: \.done) { context.delete(e) }
+        advanceTimedTargets(in: w)
         save()
         if w.entries.isEmpty {
             context.delete(w)
@@ -290,6 +291,17 @@ final class WorkoutSession: ObservableObject {
         summary = w
         reset(keepPresented: true)
         WidgetSync.shared.refresh()
+    }
+
+    /// Timed holds progress by raising the routine's own target, so each routine keeps its own and edits in the routine editor win.
+    private func advanceTimedTargets(in w: Workout) {
+        guard let routine = w.routine else { return }
+        for e in w.entries {
+            guard let ex = e.exercise, ex.kind == .timed,
+                  let item = routine.items.first(where: { $0.exercise === ex }) else { continue }
+            let p = Analytics.plan(kind: .timed, config: ProgressionConfig(e), last: Session(entry: e, workout: w, sets: e.doneWorkingSets))
+            if p.progressed { item.targetSeconds = p.seconds }
+        }
     }
 
     func discard() {
