@@ -298,9 +298,14 @@ final class WorkoutSession: ObservableObject {
     /// Timed holds progress by raising the routine's own target, so each routine keeps its own and edits in the routine editor win.
     private func advanceTimedTargets(in w: Workout) {
         guard let routine = w.routine else { return }
-        for e in w.entries {
-            guard let ex = e.exercise, ex.kind == .timed,
-                  let item = routine.items.first(where: { $0.exercise === ex }) else { continue }
+        let entries = w.sortedEntries
+        for (i, e) in entries.enumerated() {
+            guard let ex = e.exercise, ex.kind == .timed else { continue }
+            // Pair the k-th entry of an exercise with the k-th routine item of that exercise.
+            let k = entries[..<i].filter { $0.exercise === ex }.count
+            let items = routine.sortedItems.filter { $0.exercise === ex }
+            guard k < items.count else { continue }
+            let item = items[k]
             let p = Analytics.plan(kind: .timed, config: ProgressionConfig(e), last: Session(entry: e, workout: w, sets: e.doneWorkingSets))
             if p.progressed { item.targetSeconds = p.seconds }
         }
