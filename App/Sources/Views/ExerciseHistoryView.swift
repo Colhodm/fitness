@@ -148,7 +148,10 @@ struct ExerciseHistoryView: View {
     private func chart(_ points: [(date: Date, value: Double)], selectedSession: Session?) -> some View {
         let lo = points.map(\.value).min() ?? 0, hi = points.map(\.value).max() ?? 1
         let pad = max(1, (hi - lo) * 0.15)
-        if exercise.kind == .timed {
+        if points.isEmpty {
+            Text("No sessions in this range").font(.system(size: 15)).foregroundStyle(Palette.secondary)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if exercise.kind == .timed {
             Chart {
                 ForEach(Array(points.suffix(12).enumerated()), id: \.offset) { i, p in
                     BarMark(x: .value("Session", i), y: .value("Value", p.value), width: .ratio(0.7))
