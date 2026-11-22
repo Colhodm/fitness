@@ -51,6 +51,7 @@ struct ActiveWorkoutView: View {
                     .padding(.bottom, keypad != nil ? 420 : (rest.isRunning ? 130 : 40))
                 }
                 .scrollIndicators(.hidden)
+                .clipped() // keep scrolled cards out from behind the status bar
                 #if DEBUG
                 .onAppear {
                     if ProcessInfo.processInfo.arguments.contains("-keypad"),
@@ -73,10 +74,6 @@ struct ActiveWorkoutView: View {
         .animation(.snappy(duration: 0.25), value: keypad)
         .animation(.snappy(duration: 0.25), value: rest.isRunning)
         .background(Color.black.ignoresSafeArea())
-        .overlay(alignment: .top) {
-            // Masks the status bar so scrolled content doesn't show behind it.
-            Color.black.frame(height: 0).ignoresSafeArea(edges: .top)
-        }
         .sheet(isPresented: $addingExercise) { ExercisePicker { session.addExercise($0) } }
         .confirmationDialog("Finish workout?", isPresented: $confirmFinish, titleVisibility: .visible) {
             Button("Finish") { Task { await session.finish() } }

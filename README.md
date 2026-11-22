@@ -52,6 +52,8 @@ That one prefix drives every identifier:
 
 The Simulator builds without a team; a device or TestFlight build needs one.
 
+To test Apple Health in the Simulator, build with ad-hoc signing so the HealthKit and App Group entitlements are embedded: `xcodebuild -scheme LiftRunBody -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGN_IDENTITY=- CODE_SIGNING_ALLOWED=YES DEVELOPMENT_TEAM= build`. With `CODE_SIGNING_ALLOWED=NO`, "Connect Apple Health" fails.
+
 ## 3. Capabilities
 
 The entitlements are already in the project (generated from `project.yml`):
