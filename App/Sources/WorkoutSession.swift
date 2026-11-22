@@ -48,7 +48,7 @@ final class WorkoutSession: ObservableObject {
         if let routine {
             for (i, item) in routine.sortedItems.enumerated() {
                 guard let ex = item.exercise else { continue }
-                let e = makeEntry(ex, order: i, in: w, config: ProgressionConfig(item), rest: item.restSeconds)
+                let e = makeEntry(ex, order: i, in: w, config: ProgressionConfig(item), rest: item.restSeconds, fromRoutine: true)
                 e.supersetGroup = item.supersetGroup
             }
         }
@@ -95,7 +95,7 @@ final class WorkoutSession: ObservableObject {
     }
 
     @discardableResult
-    private func makeEntry(_ ex: Exercise, order: Int, in w: Workout, config: ProgressionConfig, rest restSeconds: Int) -> WorkoutEntry {
+    private func makeEntry(_ ex: Exercise, order: Int, in w: Workout, config: ProgressionConfig, rest restSeconds: Int, fromRoutine: Bool = false) -> WorkoutEntry {
         let e = WorkoutEntry(order: order, exercise: ex)
         e.targetSets = config.sets
         e.repLow = config.repLow
@@ -105,7 +105,9 @@ final class WorkoutSession: ObservableObject {
         let prior = Analytics.sessions(ex, excluding: w)
         let last = prior.last
         let plan = Analytics.plan(kind: ex.kind, config: config, last: last)
-        e.targetSeconds = ex.kind == .timed ? (plan.seconds > 0 ? plan.seconds : config.targetSeconds) : config.targetSeconds
+        // Routine holds already carry their progression (advanceTimedTargets), so don't add it again here.
+        e.targetSeconds = ex.kind == .timed && !(fromRoutine && config.targetSeconds > 0)
+            ? (plan.seconds > 0 ? plan.seconds : config.targetSeconds) : config.targetSeconds
         e.targetDistance = ex.kind == .distanceWeight ? (plan.distance > 0 ? plan.distance : config.targetDistance) : config.targetDistance
         e.workout = w
         context?.insert(e)
