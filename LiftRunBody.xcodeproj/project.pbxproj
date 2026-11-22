@@ -1,0 +1,677 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		09D408F4C7CFC2DF2F7FC6E4 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D88D3424F22F50139637F6A /* Components.swift */; };
+		0B6BE6634F8FE5588A52D6B5 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AF596A3556F0CD2532451F /* Palette.swift */; };
+		1178D7F19ABBA803B5AD694A /* RestActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD895B8B4A097249F8B41DED /* RestActivityAttributes.swift */; };
+		1213610CC9011AA0B3FDB376 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 643787374B4F2C16C3606393 /* SettingsView.swift */; };
+		18ED407D9DBF70E47595C34B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD4966F6D10D9993D6B2736 /* RootView.swift */; };
+		1ADE9960B6FE3A1E9656CBB1 /* RestIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F459905F9798B68FD22C53 /* RestIntents.swift */; };
+		2AABB707DB98FD95FFC07B0A /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5096126665B315AA0697FF2F /* HealthKit.framework */; };
+		31475ECE597C0CBC4F58C677 /* WorkoutSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCFC8B00EB3BE6AE377E5B9 /* WorkoutSummaryView.swift */; };
+		35CBA59C332F3257C936C37C /* LiftRunBodyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE5131A8D2DB2BF0703FF6C /* LiftRunBodyApp.swift */; };
+		406B3E1EDDB22C129C5C607A /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11D6369B37A1DD7BAA521EF /* WidgetSnapshot.swift */; };
+		417FC92B1E224EDBB3EAB79A /* LiftHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45BC47002E01CB050F5C4AE /* LiftHomeView.swift */; };
+		4EC342672903DA5E7A731745 /* BodyMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BAF532CFA4209ACBF93BC0 /* BodyMath.swift */; };
+		4FD6E4479B6E3C17E3E42C9F /* HealthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242798B600CDDAAF597E22AD /* HealthStore.swift */; };
+		51EFF80B74CDAA78FCFC8C6F /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF5254BD6DE7D62847F23D1 /* SampleData.swift */; };
+		52228388E2C04FFF386B0347 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D85BBD7CDBC653F9A88A78E4 /* Assets.xcassets */; };
+		530A30A1A20C0DB5084BA3EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0544C62C62DE7A206B7E4694 /* Assets.xcassets */; };
+		532F7D6053A8D7CA54149DBE /* LiftRunBodyWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3156022AA5F17316C099D899 /* LiftRunBodyWidgets.swift */; };
+		542FB6FFBBA66D90ADB3E9A9 /* RestTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C159F8BAE6F0C553B6CCF673 /* RestTimer.swift */; };
+		54842AD1FA91CAC1B23F8ED5 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BB8ADB3194D62841597121 /* Analytics.swift */; };
+		57AF585C3CC7257754C2A4BE /* OnboardingImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF802297A1EE43D57B1BFBB5 /* OnboardingImport.swift */; };
+		5A9C9D4EA85C4159325C6946 /* ExerciseHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B878697B8226BBC101263338 /* ExerciseHistoryView.swift */; };
+		5BCE81BDBE38B967CA608039 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD508876173D867872114A9B /* AppGroup.swift */; };
+		63E976E6A8DF01DA127DA5CE /* BodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407DA2B9EE6E189D814112C4 /* BodyView.swift */; };
+		6F56D76CB44FB224A2842524 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD508876173D867872114A9B /* AppGroup.swift */; };
+		71665C5212EAA70363281DAF /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97E0D74DAC8FC58ECE3BE14 /* TodayView.swift */; };
+		76657165AD11617BA11DABA2 /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC97BBEA484477A4193E91B7 /* Library.swift */; };
+		7F39DF765EFC7B2F5B294ADA /* WorkoutSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = B306F69AFFEFD24EE8CF9CBD /* WorkoutSession.swift */; };
+		808B476FBDEE2C5F5A0EBE8E /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA51DAD013B2670F91A4D98D /* Formatting.swift */; };
+		88835D26B59C874BCA287CF9 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801BA487AEDC4DB58098EB90 /* AppSettings.swift */; };
+		8E09C29441476D627FA918EC /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE0F74BC53066A7BB310EE /* Models.swift */; };
+		9589159C4D88CD0995CBFA96 /* NotesImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6981CB82B3FC469BB1E6ACB5 /* NotesImporter.swift */; };
+		9C71637829234913D6A21AD1 /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11D6369B37A1DD7BAA521EF /* WidgetSnapshot.swift */; };
+		9E46A89F8383F84BE5FC5F29 /* RestActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD895B8B4A097249F8B41DED /* RestActivityAttributes.swift */; };
+		B15A129518D6C54BFEE5DAE9 /* EditorViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284F87D0090F8E16B9F3A85A /* EditorViews.swift */; };
+		B3E3FB4F12F4C7DE5C96692A /* RunsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F78C53F87940A852BF442 /* RunsViews.swift */; };
+		D46B7CF4F5311463346105DB /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E6FF3E99BF87D3B00938FAC /* SwiftUI.framework */; };
+		DBAE65AF5B3C03200D70F38D /* RestIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F459905F9798B68FD22C53 /* RestIntents.swift */; };
+		DFF234EC22C4DAF49F8C4B39 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AF596A3556F0CD2532451F /* Palette.swift */; };
+		E3186BC7DDAB5FB71F5E3ADA /* ActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04559C0D99FA981A3EBCEBBF /* ActiveWorkoutView.swift */; };
+		E414BEB91184D4C0C692A5C4 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC56F3D77439454BB3D269DB /* WidgetKit.framework */; };
+		EC07E8FDACDE075E62CC51BF /* LiftRunBodyWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 95A0E086D27636B0638BE2CE /* LiftRunBodyWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F0A90042495262A7ED995C97 /* WidgetSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C63A99C73A3D30B5FA478 /* WidgetSync.swift */; };
+		F4058BE5EFD9FE44BCC54257 /* TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE58B0475D69BF0F9096CE8 /* TrendsView.swift */; };
+		F91DB65792D6F2338416A107 /* SetKeypad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C146BFF0F40208DED1EC96 /* SetKeypad.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4587152F1B3696B3C6C39DC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CEC2C217BCB9C121C603E785 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D8DA19336DD26885E73BBB32;
+			remoteInfo = LiftRunBodyWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		ECE650F5F6EF5B1720368554 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				EC07E8FDACDE075E62CC51BF /* LiftRunBodyWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		04559C0D99FA981A3EBCEBBF /* ActiveWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveWorkoutView.swift; sourceTree = "<group>"; };
+		0544C62C62DE7A206B7E4694 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1CE5131A8D2DB2BF0703FF6C /* LiftRunBodyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftRunBodyApp.swift; sourceTree = "<group>"; };
+		1D88D3424F22F50139637F6A /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		1FCFC8B00EB3BE6AE377E5B9 /* WorkoutSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummaryView.swift; sourceTree = "<group>"; };
+		242798B600CDDAAF597E22AD /* HealthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStore.swift; sourceTree = "<group>"; };
+		284F87D0090F8E16B9F3A85A /* EditorViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViews.swift; sourceTree = "<group>"; };
+		3156022AA5F17316C099D899 /* LiftRunBodyWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftRunBodyWidgets.swift; sourceTree = "<group>"; };
+		407DA2B9EE6E189D814112C4 /* BodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyView.swift; sourceTree = "<group>"; };
+		4E6FF3E99BF87D3B00938FAC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		5096126665B315AA0697FF2F /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		643787374B4F2C16C3606393 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		6981CB82B3FC469BB1E6ACB5 /* NotesImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesImporter.swift; sourceTree = "<group>"; };
+		6A5C63A99C73A3D30B5FA478 /* WidgetSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSync.swift; sourceTree = "<group>"; };
+		71C146BFF0F40208DED1EC96 /* SetKeypad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetKeypad.swift; sourceTree = "<group>"; };
+		801BA487AEDC4DB58098EB90 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		8273AA8435F66F575D8B2352 /* LiftRunBodyWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LiftRunBodyWidgets.entitlements; sourceTree = "<group>"; };
+		88AF596A3556F0CD2532451F /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
+		8BE58B0475D69BF0F9096CE8 /* TrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsView.swift; sourceTree = "<group>"; };
+		95A0E086D27636B0638BE2CE /* LiftRunBodyWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = LiftRunBodyWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		98BB8ADB3194D62841597121 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		99DE0F74BC53066A7BB310EE /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		A1F7F6DA6B8B22009F36192B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B306F69AFFEFD24EE8CF9CBD /* WorkoutSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSession.swift; sourceTree = "<group>"; };
+		B45BC47002E01CB050F5C4AE /* LiftHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftHomeView.swift; sourceTree = "<group>"; };
+		B878697B8226BBC101263338 /* ExerciseHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseHistoryView.swift; sourceTree = "<group>"; };
+		B97E0D74DAC8FC58ECE3BE14 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		C159F8BAE6F0C553B6CCF673 /* RestTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimer.swift; sourceTree = "<group>"; };
+		C91F78C53F87940A852BF442 /* RunsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunsViews.swift; sourceTree = "<group>"; };
+		CC56F3D77439454BB3D269DB /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		CD895B8B4A097249F8B41DED /* RestActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestActivityAttributes.swift; sourceTree = "<group>"; };
+		D85BBD7CDBC653F9A88A78E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DCD820BF6B4FA1CBAD241133 /* LiftRunBody.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LiftRunBody.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DFD4966F6D10D9993D6B2736 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		E19A31C1EE7D8873C5A4B8D6 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
+		EEF5254BD6DE7D62847F23D1 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		F11D6369B37A1DD7BAA521EF /* WidgetSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSnapshot.swift; sourceTree = "<group>"; };
+		F2BAF532CFA4209ACBF93BC0 /* BodyMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyMath.swift; sourceTree = "<group>"; };
+		F9F459905F9798B68FD22C53 /* RestIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestIntents.swift; sourceTree = "<group>"; };
+		FA51DAD013B2670F91A4D98D /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
+		FC97BBEA484477A4193E91B7 /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
+		FD508876173D867872114A9B /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
+		FF802297A1EE43D57B1BFBB5 /* OnboardingImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingImport.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5E3567C1947632C9B2E6DE82 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AABB707DB98FD95FFC07B0A /* HealthKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1DFDE4C48B1D845187180A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E414BEB91184D4C0C692A5C4 /* WidgetKit.framework in Frameworks */,
+				D46B7CF4F5311463346105DB /* SwiftUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		146DDD536C411661513A8D28 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D85BBD7CDBC653F9A88A78E4 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		160E412790CCC850479EFF02 = {
+			isa = PBXGroup;
+			children = (
+				9950C52604BDBCD1A359F6F9 /* App */,
+				2FFF8E571AA062FAC9F348C5 /* Config */,
+				A4938C71AF0D5403CDEC29FC /* Shared */,
+				2AA75999EF8C47BFF69B107B /* Widgets */,
+				B4CDFBC843D8A0E8EBAB7429 /* Frameworks */,
+				4AD8AF82A602A306B34A7E8E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2528228D2D2A12CCAB8A2C8C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				04559C0D99FA981A3EBCEBBF /* ActiveWorkoutView.swift */,
+				407DA2B9EE6E189D814112C4 /* BodyView.swift */,
+				1D88D3424F22F50139637F6A /* Components.swift */,
+				284F87D0090F8E16B9F3A85A /* EditorViews.swift */,
+				B878697B8226BBC101263338 /* ExerciseHistoryView.swift */,
+				B45BC47002E01CB050F5C4AE /* LiftHomeView.swift */,
+				FF802297A1EE43D57B1BFBB5 /* OnboardingImport.swift */,
+				DFD4966F6D10D9993D6B2736 /* RootView.swift */,
+				C91F78C53F87940A852BF442 /* RunsViews.swift */,
+				71C146BFF0F40208DED1EC96 /* SetKeypad.swift */,
+				643787374B4F2C16C3606393 /* SettingsView.swift */,
+				B97E0D74DAC8FC58ECE3BE14 /* TodayView.swift */,
+				8BE58B0475D69BF0F9096CE8 /* TrendsView.swift */,
+				1FCFC8B00EB3BE6AE377E5B9 /* WorkoutSummaryView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2AA75999EF8C47BFF69B107B /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				0544C62C62DE7A206B7E4694 /* Assets.xcassets */,
+				A1F7F6DA6B8B22009F36192B /* Info.plist */,
+				8273AA8435F66F575D8B2352 /* LiftRunBodyWidgets.entitlements */,
+				3156022AA5F17316C099D899 /* LiftRunBodyWidgets.swift */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
+		2FFF8E571AA062FAC9F348C5 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				E19A31C1EE7D8873C5A4B8D6 /* Signing.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		49879B0067AC0630B7977F6B /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				98BB8ADB3194D62841597121 /* Analytics.swift */,
+				801BA487AEDC4DB58098EB90 /* AppSettings.swift */,
+				F2BAF532CFA4209ACBF93BC0 /* BodyMath.swift */,
+				FA51DAD013B2670F91A4D98D /* Formatting.swift */,
+				242798B600CDDAAF597E22AD /* HealthStore.swift */,
+				FC97BBEA484477A4193E91B7 /* Library.swift */,
+				1CE5131A8D2DB2BF0703FF6C /* LiftRunBodyApp.swift */,
+				99DE0F74BC53066A7BB310EE /* Models.swift */,
+				6981CB82B3FC469BB1E6ACB5 /* NotesImporter.swift */,
+				C159F8BAE6F0C553B6CCF673 /* RestTimer.swift */,
+				EEF5254BD6DE7D62847F23D1 /* SampleData.swift */,
+				6A5C63A99C73A3D30B5FA478 /* WidgetSync.swift */,
+				B306F69AFFEFD24EE8CF9CBD /* WorkoutSession.swift */,
+				2528228D2D2A12CCAB8A2C8C /* Views */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		4AD8AF82A602A306B34A7E8E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DCD820BF6B4FA1CBAD241133 /* LiftRunBody.app */,
+				95A0E086D27636B0638BE2CE /* LiftRunBodyWidgets.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9950C52604BDBCD1A359F6F9 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				146DDD536C411661513A8D28 /* Resources */,
+				49879B0067AC0630B7977F6B /* Sources */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A4938C71AF0D5403CDEC29FC /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				FD508876173D867872114A9B /* AppGroup.swift */,
+				88AF596A3556F0CD2532451F /* Palette.swift */,
+				CD895B8B4A097249F8B41DED /* RestActivityAttributes.swift */,
+				F9F459905F9798B68FD22C53 /* RestIntents.swift */,
+				F11D6369B37A1DD7BAA521EF /* WidgetSnapshot.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		B4CDFBC843D8A0E8EBAB7429 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5096126665B315AA0697FF2F /* HealthKit.framework */,
+				4E6FF3E99BF87D3B00938FAC /* SwiftUI.framework */,
+				CC56F3D77439454BB3D269DB /* WidgetKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1CB84A6CF679CE21DC55EE9E /* LiftRunBody */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 665C43A566144FABCD5B1D43 /* Build configuration list for PBXNativeTarget "LiftRunBody" */;
+			buildPhases = (
+				D4FC902AB5D7708829307B11 /* Sources */,
+				9043CF303762F351EFBFBA59 /* Resources */,
+				5E3567C1947632C9B2E6DE82 /* Frameworks */,
+				ECE650F5F6EF5B1720368554 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7084AA37B811A75FFF18DBB0 /* PBXTargetDependency */,
+			);
+			name = LiftRunBody;
+			packageProductDependencies = (
+			);
+			productName = LiftRunBody;
+			productReference = DCD820BF6B4FA1CBAD241133 /* LiftRunBody.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D8DA19336DD26885E73BBB32 /* LiftRunBodyWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9BE82D1226909B6BDD7A0425 /* Build configuration list for PBXNativeTarget "LiftRunBodyWidgets" */;
+			buildPhases = (
+				6F03FD98E5594F002E5E45A1 /* Sources */,
+				D1A8C191D77168CC12A0DB68 /* Resources */,
+				F1DFDE4C48B1D845187180A5 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LiftRunBodyWidgets;
+			packageProductDependencies = (
+			);
+			productName = LiftRunBodyWidgets;
+			productReference = 95A0E086D27636B0638BE2CE /* LiftRunBodyWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CEC2C217BCB9C121C603E785 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					1CB84A6CF679CE21DC55EE9E = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					D8DA19336DD26885E73BBB32 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 1370835DA0737C3A49CE52BC /* Build configuration list for PBXProject "LiftRunBody" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 160E412790CCC850479EFF02;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 4AD8AF82A602A306B34A7E8E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1CB84A6CF679CE21DC55EE9E /* LiftRunBody */,
+				D8DA19336DD26885E73BBB32 /* LiftRunBodyWidgets */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9043CF303762F351EFBFBA59 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52228388E2C04FFF386B0347 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1A8C191D77168CC12A0DB68 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				530A30A1A20C0DB5084BA3EA /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6F03FD98E5594F002E5E45A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F56D76CB44FB224A2842524 /* AppGroup.swift in Sources */,
+				532F7D6053A8D7CA54149DBE /* LiftRunBodyWidgets.swift in Sources */,
+				DFF234EC22C4DAF49F8C4B39 /* Palette.swift in Sources */,
+				9E46A89F8383F84BE5FC5F29 /* RestActivityAttributes.swift in Sources */,
+				1ADE9960B6FE3A1E9656CBB1 /* RestIntents.swift in Sources */,
+				9C71637829234913D6A21AD1 /* WidgetSnapshot.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4FC902AB5D7708829307B11 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3186BC7DDAB5FB71F5E3ADA /* ActiveWorkoutView.swift in Sources */,
+				54842AD1FA91CAC1B23F8ED5 /* Analytics.swift in Sources */,
+				5BCE81BDBE38B967CA608039 /* AppGroup.swift in Sources */,
+				88835D26B59C874BCA287CF9 /* AppSettings.swift in Sources */,
+				4EC342672903DA5E7A731745 /* BodyMath.swift in Sources */,
+				63E976E6A8DF01DA127DA5CE /* BodyView.swift in Sources */,
+				09D408F4C7CFC2DF2F7FC6E4 /* Components.swift in Sources */,
+				B15A129518D6C54BFEE5DAE9 /* EditorViews.swift in Sources */,
+				5A9C9D4EA85C4159325C6946 /* ExerciseHistoryView.swift in Sources */,
+				808B476FBDEE2C5F5A0EBE8E /* Formatting.swift in Sources */,
+				4FD6E4479B6E3C17E3E42C9F /* HealthStore.swift in Sources */,
+				76657165AD11617BA11DABA2 /* Library.swift in Sources */,
+				417FC92B1E224EDBB3EAB79A /* LiftHomeView.swift in Sources */,
+				35CBA59C332F3257C936C37C /* LiftRunBodyApp.swift in Sources */,
+				8E09C29441476D627FA918EC /* Models.swift in Sources */,
+				9589159C4D88CD0995CBFA96 /* NotesImporter.swift in Sources */,
+				57AF585C3CC7257754C2A4BE /* OnboardingImport.swift in Sources */,
+				0B6BE6634F8FE5588A52D6B5 /* Palette.swift in Sources */,
+				1178D7F19ABBA803B5AD694A /* RestActivityAttributes.swift in Sources */,
+				DBAE65AF5B3C03200D70F38D /* RestIntents.swift in Sources */,
+				542FB6FFBBA66D90ADB3E9A9 /* RestTimer.swift in Sources */,
+				18ED407D9DBF70E47595C34B /* RootView.swift in Sources */,
+				B3E3FB4F12F4C7DE5C96692A /* RunsViews.swift in Sources */,
+				51EFF80B74CDAA78FCFC8C6F /* SampleData.swift in Sources */,
+				F91DB65792D6F2338416A107 /* SetKeypad.swift in Sources */,
+				1213610CC9011AA0B3FDB376 /* SettingsView.swift in Sources */,
+				71665C5212EAA70363281DAF /* TodayView.swift in Sources */,
+				F4058BE5EFD9FE44BCC54257 /* TrendsView.swift in Sources */,
+				406B3E1EDDB22C129C5C607A /* WidgetSnapshot.swift in Sources */,
+				F0A90042495262A7ED995C97 /* WidgetSync.swift in Sources */,
+				7F39DF765EFC7B2F5B294ADA /* WorkoutSession.swift in Sources */,
+				31475ECE597C0CBC4F58C677 /* WorkoutSummaryView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7084AA37B811A75FFF18DBB0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D8DA19336DD26885E73BBB32 /* LiftRunBodyWidgets */;
+			targetProxy = 4587152F1B3696B3C6C39DC1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		082B201AD9F17D9FA820BF28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Widgets/LiftRunBodyWidgets.entitlements;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX).LiftRunBody.Widgets";
+				PRODUCT_NAME = LiftRunBodyWidgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3740C78AE910F62E1E619898 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = App/LiftRunBody.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Lift + Run + Body";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX).LiftRunBody";
+				PRODUCT_NAME = LiftRunBody;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		43AD783C5ADE13893C8D541F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Widgets/LiftRunBodyWidgets.entitlements;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX).LiftRunBody.Widgets";
+				PRODUCT_NAME = LiftRunBodyWidgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4DBC5DC3493B1528CEC73A44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = App/LiftRunBody.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Lift + Run + Body";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX).LiftRunBody";
+				PRODUCT_NAME = LiftRunBody;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6A35AC7292BD98D51B89DB8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E19A31C1EE7D8873C5A4B8D6 /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_GROUP_ID = "group.$(BUNDLE_ID_PREFIX).LiftRunBody";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		93880BDAC35FC53B4057B3BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E19A31C1EE7D8873C5A4B8D6 /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_GROUP_ID = "group.$(BUNDLE_ID_PREFIX).LiftRunBody";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1370835DA0737C3A49CE52BC /* Build configuration list for PBXProject "LiftRunBody" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A35AC7292BD98D51B89DB8D /* Debug */,
+				93880BDAC35FC53B4057B3BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		665C43A566144FABCD5B1D43 /* Build configuration list for PBXNativeTarget "LiftRunBody" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3740C78AE910F62E1E619898 /* Debug */,
+				4DBC5DC3493B1528CEC73A44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9BE82D1226909B6BDD7A0425 /* Build configuration list for PBXNativeTarget "LiftRunBodyWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				082B201AD9F17D9FA820BF28 /* Debug */,
+				43AD783C5ADE13893C8D541F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CEC2C217BCB9C121C603E785 /* Project object */;
+}
