@@ -307,7 +307,8 @@ final class WorkoutSession: ObservableObject {
             guard k < items.count else { continue }
             let item = items[k]
             let p = Analytics.plan(kind: .timed, config: ProgressionConfig(e), last: Session(entry: e, workout: w, sets: e.doneWorkingSets))
-            if p.progressed { item.targetSeconds = p.seconds }
+            // Skip if the routine target was edited during the workout; the edit wins.
+            if p.progressed, item.targetSeconds == e.targetSeconds { item.targetSeconds = p.seconds }
         }
     }
 
