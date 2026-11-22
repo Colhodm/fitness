@@ -161,16 +161,17 @@ struct RestTimerLiveActivity: Widget {
                 .widgetURL(URL(string: "liftrunbody://workout"))
         } dynamicIsland: { context in
             let s = context.state
+            let resting = Self.isResting(context)
             return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(s.restEndsAt != nil ? "REST" : "LIFTING").font(.system(size: 11, weight: .bold)).foregroundStyle(Palette.orange)
-                        timer(s, size: 30)
+                        Text(resting ? "REST" : "LIFTING").font(.system(size: 11, weight: .bold)).foregroundStyle(Palette.orange)
+                        timer(context, size: 30)
                     }
                     .padding(.leading, 6)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    if s.restEndsAt != nil {
+                    if resting {
                         HStack(spacing: 6) {
                             Button(intent: AddRestTimeIntent()) { Text("+15").font(.system(size: 15, weight: .semibold)).lineLimit(1).fixedSize() }
                                 .tint(Palette.fieldHigh)
@@ -185,7 +186,7 @@ struct RestTimerLiveActivity: Widget {
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     VStack(alignment: .leading, spacing: 6) {
-                        if let end = s.restEndsAt, let start = s.restStartedAt {
+                        if resting, let end = s.restEndsAt, let start = s.restStartedAt {
                             ProgressView(timerInterval: start...end, countsDown: true) { EmptyView() } currentValueLabel: { EmptyView() }
                                 .tint(Palette.orange)
                         }
@@ -197,7 +198,7 @@ struct RestTimerLiveActivity: Widget {
             } compactLeading: {
                 Image(systemName: "dumbbell.fill").foregroundStyle(Palette.orange)
             } compactTrailing: {
-                timer(s, size: 14).frame(maxWidth: 46)
+                timer(context, size: 14).frame(maxWidth: 46)
             } minimal: {
                 Image(systemName: "dumbbell.fill").foregroundStyle(Palette.orange)
             }
@@ -206,9 +207,15 @@ struct RestTimerLiveActivity: Widget {
         }
     }
 
-    @ViewBuilder private func timer(_ s: RestActivityAttributes.ContentState, size: CGFloat) -> some View {
-        if let end = s.restEndsAt, end > Date() {
-            Text(timerInterval: Date()...end, countsDown: true).font(.system(size: size, weight: .bold)).monospacedDigit().foregroundStyle(Palette.orange)
+    /// Rest is over once the end date passes; `isStale` flips at the staleDate (= rest end) even while the app is suspended.
+    static func isResting(_ context: ActivityViewContext<RestActivityAttributes>) -> Bool {
+        guard let end = context.state.restEndsAt, !context.isStale else { return false }
+        return end > Date()
+    }
+
+    @ViewBuilder private func timer(_ context: ActivityViewContext<RestActivityAttributes>, size: CGFloat) -> some View {
+        if Self.isResting(context), let end = context.state.restEndsAt {
+            Text(timerInterval: (context.state.restStartedAt ?? Date())...end, countsDown: true).font(.system(size: size, weight: .bold)).monospacedDigit().foregroundStyle(Palette.orange)
         } else {
             Text("Go").font(.system(size: size, weight: .bold)).foregroundStyle(Palette.orange)
         }
@@ -219,25 +226,26 @@ struct LockScreenRestView: View {
     let context: ActivityViewContext<RestActivityAttributes>
     var body: some View {
         let s = context.state
+        let resting = RestTimerLiveActivity.isResting(context)
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Image(systemName: "dumbbell.fill").foregroundStyle(Palette.orange)
                 Text(context.attributes.workoutName).font(.system(size: 15, weight: .semibold))
                 Spacer()
-                Text(timerInterval: context.attributes.workoutStartedAt...Date.distantFuture, countsDown: false)
+                Text(timerInterval: (s.workoutStartedAt ?? context.attributes.workoutStartedAt)...Date.distantFuture, countsDown: false)
                     .font(.system(size: 13)).foregroundStyle(Palette.secondary).monospacedDigit().multilineTextAlignment(.trailing).frame(width: 60)
             }
             HStack(alignment: .center) {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(s.restEndsAt != nil ? "REST" : "UP NEXT").font(.system(size: 11, weight: .bold)).foregroundStyle(Palette.secondary)
-                    if let end = s.restEndsAt, end > Date() {
-                        Text(timerInterval: Date()...end, countsDown: true).font(.system(size: 40, weight: .bold)).monospacedDigit().foregroundStyle(Palette.orange)
+                    Text(resting ? "REST" : "UP NEXT").font(.system(size: 11, weight: .bold)).foregroundStyle(Palette.secondary)
+                    if resting, let end = s.restEndsAt {
+                        Text(timerInterval: (s.restStartedAt ?? Date())...end, countsDown: true).font(.system(size: 40, weight: .bold)).monospacedDigit().foregroundStyle(Palette.orange)
                     } else {
                         Text(s.target.isEmpty ? "Go" : s.target).font(.system(size: 28, weight: .bold)).foregroundStyle(Palette.orange)
                     }
                 }
                 Spacer()
-                if s.restEndsAt != nil {
+                if resting {
                     Button(intent: AddRestTimeIntent()) { Text("+15").font(.system(size: 15, weight: .semibold)).frame(width: 44) }
                         .tint(.white.opacity(0.2))
                     Button(intent: SkipRestIntent()) { Text("Skip").font(.system(size: 15, weight: .semibold)).foregroundStyle(.black).frame(width: 44) }
@@ -246,7 +254,7 @@ struct LockScreenRestView: View {
             }
             .buttonStyle(.borderedProminent)
             .buttonBorderShape(.capsule)
-            if let end = s.restEndsAt, let start = s.restStartedAt {
+            if resting, let end = s.restEndsAt, let start = s.restStartedAt {
                 ProgressView(timerInterval: start...end, countsDown: true) { EmptyView() } currentValueLabel: { EmptyView() }.tint(Palette.orange)
             }
             Text("Next: \(s.exerciseName)\(s.upNext.isEmpty ? "" : " · \(s.upNext)")\(s.target.isEmpty ? "" : " · \(s.target)")")

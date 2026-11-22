@@ -11,6 +11,8 @@ struct RestActivityAttributes: ActivityAttributes {
         var upNext: String
         /// e.g. "160 × 9"
         var target: String
+        /// Workout start, so the Lock Screen clock stays right even if the activity outlives an edit to the start time.
+        var workoutStartedAt: Date?
 
         var isResting: Bool {
             guard let restEndsAt else { return false }

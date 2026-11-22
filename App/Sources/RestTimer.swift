@@ -131,7 +131,7 @@ final class LiveActivityController {
         do {
             activity = try Activity.request(
                 attributes: RestActivityAttributes(workoutName: workoutName, workoutStartedAt: startedAt),
-                content: ActivityContent(state: state, staleDate: nil))
+                content: ActivityContent(state: state, staleDate: state.restEndsAt))
         } catch {
             print("Live Activity failed: \(error)")
         }
@@ -139,7 +139,8 @@ final class LiveActivityController {
 
     func update(_ state: RestActivityAttributes.ContentState) {
         guard let activity else { return }
-        Task { await activity.update(ActivityContent(state: state, staleDate: nil)) }
+        // staleDate = rest end, so the system re-renders as "Go" even if the app is suspended when rest runs out.
+        Task { await activity.update(ActivityContent(state: state, staleDate: state.restEndsAt)) }
     }
 
     func endAll() {

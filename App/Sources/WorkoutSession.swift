@@ -362,7 +362,7 @@ final class WorkoutSession: ObservableObject {
             }
         }
         return .init(restEndsAt: rest.isRunning ? rest.endsAt : nil, restStartedAt: rest.isRunning ? rest.startedAt : nil,
-                     exerciseName: name, upNext: upNext, target: target)
+                     exerciseName: name, upNext: upNext, target: target, workoutStartedAt: workout?.startedAt)
     }
 
     func startLiveActivity() {
