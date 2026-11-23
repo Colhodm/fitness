@@ -153,7 +153,7 @@ struct ExerciseHistoryView: View {
         } else if exercise.kind == .timed {
             Chart {
                 ForEach(Array(points.suffix(12).enumerated()), id: \.offset) { i, p in
-                    BarMark(x: .value("Session", i), y: .value("Value", p.value), width: .ratio(0.7))
+                    BarMark(x: .value("Session", i), y: .value("Value", p.value), width: .fixed(16))
                         .foregroundStyle(i == min(points.count, 12) - 1 ? Palette.orange : Palette.orange.opacity(0.55))
                         .cornerRadius(3)
                 }
@@ -165,6 +165,7 @@ struct ExerciseHistoryView: View {
                     }
                 }
             }
+            .chartXScale(domain: -0.6...(Double(min(points.count, 12)) - 0.4))
             .chartYAxis { AxisMarks(position: .trailing) { v in AxisGridLine().foregroundStyle(Palette.separator); AxisValueLabel { if let s = v.as(Double.self) { Text(Fmt.clock(Int(s))) } } } }
         } else {
             Chart {
