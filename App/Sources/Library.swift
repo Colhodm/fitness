@@ -94,8 +94,16 @@ enum Library {
         let names = Set(existing.map { $0.name.lowercased() })
         // v2 split "legs" into quads, hamstrings and calves for the catalog exercises.
         if !AppGroup.defaults.bool(forKey: "catalogMusclesV2") {
-            for e in existing where e.musclesRaw.contains(Muscle.legs.rawValue) {
-                if let def = exercises.first(where: { $0.name.lowercased() == e.name.lowercased() }) { e.muscles = def.muscles }
+            let v1: [String: [Muscle]] = [
+                "Deadlift": [.back, .legs], "Back Squat": [.legs, .glutes], "Front Squat": [.legs], "Romanian Deadlift": [.legs, .glutes],
+                "Leg Press": [.legs], "Bulgarian Split Squat": [.legs, .glutes], "Walking Lunge": [.legs, .glutes], "Leg Curl": [.legs],
+                "Leg Extension": [.legs], "Hip Thrust": [.glutes, .legs], "Calf Raise": [.legs], "Goblet Squat": [.legs], "Sled Push": [.legs],
+            ]
+            for e in existing {
+                // Only update tags the user hasn't edited.
+                guard let def = exercises.first(where: { $0.name.lowercased() == e.name.lowercased() }),
+                      let old = v1[def.name], e.muscles == old else { continue }
+                e.muscles = def.muscles
             }
             AppGroup.defaults.set(true, forKey: "catalogMusclesV2")
         }
