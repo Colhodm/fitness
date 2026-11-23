@@ -10,6 +10,9 @@ struct WrappedView: View {
     @State private var includeWeight = false
     @State private var includePhotos = false
     @State private var share: ShareItem?
+    @State private var photosUnlocked = false
+
+    private var photosVisible: Bool { !AppSettings.shared.photoLock || photosUnlocked }
 
     private static let cyanCard = Color(hex: 0x7FCCF5)
 
@@ -186,15 +189,23 @@ struct WrappedView: View {
                 }
             }
             if let a = d.firstPhoto, let b = d.lastPhoto {
-                HStack(spacing: 10) {
-                    photo(a)
-                    photo(b)
+                if photosVisible {
+                    HStack(spacing: 10) {
+                        photo(a)
+                        photo(b)
+                    }
+                } else {
+                    Button { Task { photosUnlocked = await PhotoStore.unlock() } } label: {
+                        Label("Unlock progress photos", systemImage: "faceid").font(.system(size: 15, weight: .semibold)).foregroundStyle(Palette.cyan)
+                            .frame(maxWidth: .infinity).frame(height: 120).background(Palette.card, in: RoundedRectangle(cornerRadius: 14))
+                    }
+                    .buttonStyle(.plain)
                 }
             }
             Spacer()
             HStack(spacing: 8) {
                 toggle("Include weight", $includeWeight)
-                toggle("Include photos", $includePhotos)
+                if photosVisible && d.firstPhoto != nil { toggle("Include photos", $includePhotos) }
             }
             .frame(maxWidth: .infinity)
             Button { share = ShareItem(image: shareImage(d)) } label: {
@@ -251,7 +262,7 @@ struct WrappedView: View {
             if includeWeight, let f = d.weightFrom, let t = d.weightTo {
                 Text("Trend weight \(Fmt.fixed(Units.display(f), 1)) → \(Fmt.fixed(Units.display(t), 1)) \(Units.unitLabel)").font(.system(size: 15)).foregroundStyle(Palette.cyan)
             }
-            if includePhotos, let a = d.firstPhoto, let b = d.lastPhoto {
+            if includePhotos, photosVisible, let a = d.firstPhoto, let b = d.lastPhoto {
                 HStack(spacing: 8) {
                     ForEach([a, b], id: \.uuid) { p in
                         Color(Palette.card).aspectRatio(3 / 4, contentMode: .fit)
