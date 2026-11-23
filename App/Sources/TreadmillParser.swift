@@ -31,20 +31,22 @@ enum TreadmillParser {
     }
 
     static func clock(_ s: String) -> Int? {
-        guard let m = s.range(of: #"\d{1,2}:\d{2}(:\d{2})?"#, options: .regularExpression) else { return nil }
+        guard let m = s.range(of: #"[0-9]{1,2}:[0-9]{2}(:[0-9]{2})?"#, options: .regularExpression) else { return nil }
         let parts = s[m].split(separator: ":").compactMap { Int($0) }
+        guard parts.count >= 2 else { return nil }
         return parts.count == 3 ? parts[0] * 3600 + parts[1] * 60 + parts[2] : parts[0] * 60 + parts[1]
     }
 
     static func number(_ s: String) -> Double? {
-        guard !s.contains(":"), let m = s.range(of: #"\d+([.,]\d+)?"#, options: .regularExpression) else { return nil }
+        guard !s.contains(":"), let m = s.range(of: #"[0-9]+([.,][0-9]+)?"#, options: .regularExpression) else { return nil }
         return Double(s[m].replacingOccurrences(of: ",", with: "."))
     }
 
     static func parse(_ items: [Item]) -> TreadmillReading {
         var r = TreadmillReading()
         let all = items.map { $0.text.lowercased() }.joined(separator: " ")
-        if all.range(of: #"\bkm\b|kilomet"#, options: .regularExpression) != nil, !all.contains("mi") { r.distanceIsKm = true }
+        if all.range(of: #"\bkm\b|kilomet"#, options: .regularExpression) != nil,
+           all.range(of: #"\b(mi|miles?|mph)\b"#, options: .regularExpression) == nil { r.distanceIsKm = true }
         else if all.range(of: #"\b(mi|miles?|mph)\b"#, options: .regularExpression) != nil { r.distanceIsKm = false }
 
         func center(_ b: CGRect) -> CGPoint { CGPoint(x: b.midX, y: b.midY) }
