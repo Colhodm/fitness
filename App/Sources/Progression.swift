@@ -109,8 +109,11 @@ enum Progression {
         case .ready: return "You hit \(g.repHigh)+ on all \(g.sets) sets. Start at \(g.repLow) reps and build back to \(g.repHigh)."
         case .tooEasy: return "Every set went \(g.repHigh + 3)+ reps. If \(weightText(g.nextWeight, kind: kind)) still feels light, jump another step so you land in \(g.repLow)–\(g.repHigh)."
         case .stalled:
-            let deload = kind == .assisted ? g.weight * 1.1 : g.weight * 0.9
-            return "No rep gains in 3 sessions. Hold \(weightText(g.weight, kind: kind)) once more, or drop to \(weightText((deload / 5).rounded() * 5, kind: kind)) and build back up."
+            let deload = ((kind == .assisted ? g.weight * 1.1 : g.weight * 0.9) / 5).rounded() * 5
+            if abs(deload - g.weight) < 0.01 {
+                return "No rep gains in 3 sessions. Try an easier variation or a slower tempo for a week, then build back up."
+            }
+            return "No rep gains in 3 sessions. Hold \(weightText(g.weight, kind: kind)) once more, or drop to \(weightText(deload, kind: kind)) and build back up."
         case .grind: return "You hit \(g.repHigh) on every set, but above RPE 9. Move up once it feels like RPE 9 or easier."
         case .start: return "Aim for \(g.repLow)+ on every set, then add reps until all \(g.sets) sets hit \(g.repHigh)."
         case .building:
