@@ -226,7 +226,8 @@ struct EntryCard: View {
             let title = "Target \(wpart)\(entry.repLow)–\(entry.repHigh) reps"
             let next = ex.kind == .assisted ? max(0, p.weight - inc) : p.weight + inc
             let nextText = ex.kind == .bodyweight && p.weight == 0 ? "adds \(Fmt.wu(inc))" : "starts at \(Fmt.w(next))"
-            let sub = p.progressed ? "Up \(Fmt.wu(inc)) from \(Fmt.w(p.lastWeight)) · you hit \(entry.repHigh)+ on every set last time"
+            let change = ex.kind == .assisted ? "\(Fmt.wu(inc)) less assistance than \(Fmt.w(p.lastWeight))" : "Up \(Fmt.wu(inc)) from \(Fmt.w(p.lastWeight))"
+            let sub = p.progressed ? "\(change) · you hit \(entry.repHigh)+ on every set last time"
                 : "Hit \(entry.repHigh) on every set and next time \(nextText)"
             if !p.progressed, let g = session.guidance(entry), g.status != .ready, g.status != .tooEasy {
                 return (title, "\(Progression.headline(g, kind: ex.kind)) · \(sub)")
