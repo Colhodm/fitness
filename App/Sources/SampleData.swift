@@ -95,6 +95,7 @@ struct SampleHealth {
     }
 
     func detail(for run: RunSummary) -> RunDetail {
+        if run.source == "Treadmill" { return RunDetail() }
         let splits = paces[run.id] ?? []
         let miles = Units.runDisplay(run.meters)
         var d = RunDetail()

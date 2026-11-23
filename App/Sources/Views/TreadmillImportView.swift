@@ -41,7 +41,8 @@ struct TreadmillImportView: View {
                     PhotosPicker(selection: $item, matching: .images) { Label("Choose from Photos", systemImage: "photo") }
                     if reading { HStack { ProgressView(); Text("Reading the screen…").foregroundStyle(Palette.secondary) } }
                 } footer: {
-                    Text(image == nil ? "Snap the console at the end of your session. Time, distance and calories are read on this iPhone; check them before saving."
+                    Text(reading ? "Reading time, distance and calories from the photo."
+                         : image == nil ? "Snap the console at the end of your session. Time, distance and calories are read on this iPhone; check them before saving."
                          : readSomething ? "Check the numbers below. Fix anything the photo got wrong."
                          : "Couldn't read numbers from this photo. Type them in below, or try a straighter photo without glare.")
                 }
