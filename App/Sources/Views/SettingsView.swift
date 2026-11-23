@@ -77,7 +77,9 @@ struct SettingsView: View {
                         // Turning the lock on or off needs Face ID or the passcode; without a passcode it can only be turned off.
                         if on {
                             if await PhotoStore.unlock() { settings.photoLock = true }
-                        } else if !PhotoStore.canAuthenticate || (await PhotoStore.unlock()) {
+                        } else if !PhotoStore.canAuthenticate {
+                            settings.photoLock = false
+                        } else if await PhotoStore.unlock() {
                             settings.photoLock = false
                         }
                     }
