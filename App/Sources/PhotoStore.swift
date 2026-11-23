@@ -113,17 +113,19 @@ enum PhotoStore {
         guard let cg = image.cgImage else { return image }
         let req = VNDetectFaceRectanglesRequest()
         try? VNImageRequestHandler(cgImage: cg).perform([req])
-        guard let faces = req.results, !faces.isEmpty else { return image }
         let ci = CIImage(cgImage: cg)
+        var rects = (req.results ?? []).map { f -> CGRect in
+            let r = VNImageRectForNormalizedRect(f.boundingBox, cg.width, cg.height)
+            return r.insetBy(dx: -r.width * 0.3, dy: -r.height * 0.4)
+        }
+        // No face found: blur the top of the frame, where the head is in a progress photo.
+        if rects.isEmpty { rects = [CGRect(x: 0, y: ci.extent.height * 0.68, width: ci.extent.width, height: ci.extent.height * 0.32)] }
         let blurred = ci.clampedToExtent()
             .applyingFilter("CIPixellate", parameters: [kCIInputScaleKey: max(ci.extent.width, ci.extent.height) / 24])
             .cropped(to: ci.extent)
         var out = ci
-        for f in faces {
-            let r = VNImageRectForNormalizedRect(f.boundingBox, cg.width, cg.height)
-            out = blurred.cropped(to: r.insetBy(dx: -r.width * 0.3, dy: -r.height * 0.4)).composited(over: out)
-        }
-        guard let result = CIContext().createCGImage(out, from: ci.extent) else { return image }
+        for r in rects { out = blurred.cropped(to: r).composited(over: out) }
+        guard let result = CIContext().createCGImage(out, from: ci.extent) else { return UIImage() }
         return UIImage(cgImage: result)
     }
 

@@ -482,7 +482,7 @@ struct PhotoCompareView: View {
                     Toggle(isOn: $blurFaces) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Blur face when sharing").font(.system(size: 15, weight: .semibold))
-                            Text("Numbers are left off shared images unless you add them").font(.system(size: 12)).foregroundStyle(Palette.secondary)
+                            Text("If no face is found, the top of the photo is blurred. Numbers are left off shared images unless you add them").font(.system(size: 12)).foregroundStyle(Palette.secondary)
                         }
                     }
                     .tint(Palette.cyan)
