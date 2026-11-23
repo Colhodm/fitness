@@ -25,7 +25,7 @@ enum Library {
         Def(name: "Push-up", kind: .bodyweight, equipment: .bodyweight, muscles: [.chest, .triceps], aliases: ["pushups", "push ups"]),
         Def(name: "Triceps Pushdown", kind: .weightReps, equipment: .cable, muscles: [.triceps], aliases: ["pushdown", "tricep pushdown", "pushdowns"]),
         Def(name: "Skull Crusher", kind: .weightReps, equipment: .barbell, muscles: [.triceps], aliases: ["skullcrushers", "skull crushers"]),
-        Def(name: "Deadlift", kind: .weightReps, equipment: .barbell, muscles: [.back, .legs], aliases: ["dl", "deadlifts"]),
+        Def(name: "Deadlift", kind: .weightReps, equipment: .barbell, muscles: [.back, .hamstrings, .glutes], aliases: ["dl", "deadlifts"]),
         Def(name: "Barbell Row", kind: .weightReps, equipment: .barbell, muscles: [.back], aliases: ["row", "bent over row", "bb row", "rows"]),
         Def(name: "Dumbbell Row", kind: .weightReps, equipment: .dumbbell, muscles: [.back], perSide: true, aliases: ["db row", "one arm row"]),
         Def(name: "Pull-up", kind: .bodyweight, equipment: .bodyweight, muscles: [.back, .biceps], aliases: ["pullups", "pull ups", "pullup"]),
@@ -37,25 +37,25 @@ enum Library {
         Def(name: "Barbell Curl", kind: .weightReps, equipment: .barbell, muscles: [.biceps], aliases: ["curl", "curls", "bb curl"]),
         Def(name: "Dumbbell Curl", kind: .weightReps, equipment: .dumbbell, muscles: [.biceps], aliases: ["db curl", "db curls"]),
         Def(name: "Hammer Curl", kind: .weightReps, equipment: .dumbbell, muscles: [.biceps], aliases: ["hammer curls", "hammers"]),
-        Def(name: "Back Squat", kind: .weightReps, equipment: .barbell, muscles: [.legs, .glutes], aliases: ["squat", "squats", "bs"]),
-        Def(name: "Front Squat", kind: .weightReps, equipment: .barbell, muscles: [.legs], aliases: ["front squats", "fs"]),
-        Def(name: "Romanian Deadlift", kind: .weightReps, equipment: .barbell, muscles: [.legs, .glutes], aliases: ["rdl", "rdls"]),
-        Def(name: "Leg Press", kind: .weightReps, equipment: .machine, muscles: [.legs], aliases: ["legpress"]),
-        Def(name: "Bulgarian Split Squat", kind: .weightReps, equipment: .dumbbell, muscles: [.legs, .glutes], perSide: true, aliases: ["bss", "split squat", "bulgarians"]),
-        Def(name: "Walking Lunge", kind: .weightReps, equipment: .dumbbell, muscles: [.legs, .glutes], perSide: true, aliases: ["lunges", "lunge"]),
-        Def(name: "Leg Curl", kind: .weightReps, equipment: .machine, muscles: [.legs], aliases: ["hamstring curl", "leg curls"]),
-        Def(name: "Leg Extension", kind: .weightReps, equipment: .machine, muscles: [.legs], aliases: ["leg extensions", "extensions"]),
-        Def(name: "Hip Thrust", kind: .weightReps, equipment: .barbell, muscles: [.glutes, .legs], aliases: ["hip thrusts", "glute bridge"]),
-        Def(name: "Calf Raise", kind: .weightReps, equipment: .machine, muscles: [.legs], aliases: ["calves", "calf raises"]),
-        Def(name: "Goblet Squat", kind: .weightReps, equipment: .kettlebell, muscles: [.legs], aliases: ["goblet"]),
-        Def(name: "Kettlebell Swing", kind: .weightReps, equipment: .kettlebell, muscles: [.glutes, .back], aliases: ["kb swing", "swings"]),
+        Def(name: "Back Squat", kind: .weightReps, equipment: .barbell, muscles: [.quads, .glutes], aliases: ["squat", "squats", "bs"]),
+        Def(name: "Front Squat", kind: .weightReps, equipment: .barbell, muscles: [.quads], aliases: ["front squats", "fs"]),
+        Def(name: "Romanian Deadlift", kind: .weightReps, equipment: .barbell, muscles: [.hamstrings, .glutes], aliases: ["rdl", "rdls"]),
+        Def(name: "Leg Press", kind: .weightReps, equipment: .machine, muscles: [.quads, .glutes], aliases: ["legpress"]),
+        Def(name: "Bulgarian Split Squat", kind: .weightReps, equipment: .dumbbell, muscles: [.quads, .glutes], perSide: true, aliases: ["bss", "split squat", "bulgarians"]),
+        Def(name: "Walking Lunge", kind: .weightReps, equipment: .dumbbell, muscles: [.quads, .glutes], perSide: true, aliases: ["lunges", "lunge"]),
+        Def(name: "Leg Curl", kind: .weightReps, equipment: .machine, muscles: [.hamstrings], aliases: ["hamstring curl", "leg curls"]),
+        Def(name: "Leg Extension", kind: .weightReps, equipment: .machine, muscles: [.quads], aliases: ["leg extensions", "extensions"]),
+        Def(name: "Hip Thrust", kind: .weightReps, equipment: .barbell, muscles: [.glutes, .hamstrings], aliases: ["hip thrusts", "glute bridge"]),
+        Def(name: "Calf Raise", kind: .weightReps, equipment: .machine, muscles: [.calves], aliases: ["calves", "calf raises"]),
+        Def(name: "Goblet Squat", kind: .weightReps, equipment: .kettlebell, muscles: [.quads, .glutes], aliases: ["goblet"]),
+        Def(name: "Kettlebell Swing", kind: .weightReps, equipment: .kettlebell, muscles: [.glutes, .hamstrings], aliases: ["kb swing", "swings"]),
         Def(name: "Plank", kind: .timed, equipment: .bodyweight, muscles: [.core], aliases: ["planks"]),
         Def(name: "Side Plank", kind: .timed, equipment: .bodyweight, muscles: [.core], perSide: true),
         Def(name: "Dead Hang", kind: .timed, equipment: .bodyweight, muscles: [.back], aliases: ["hang"]),
         Def(name: "Hanging Leg Raise", kind: .bodyweight, equipment: .bodyweight, muscles: [.core], aliases: ["leg raises", "hlr"]),
         Def(name: "Cable Crunch", kind: .weightReps, equipment: .cable, muscles: [.core], aliases: ["crunch", "crunches"]),
         Def(name: "Farmer's Carry", kind: .distanceWeight, equipment: .dumbbell, muscles: [.core, .back], perSide: true, aliases: ["farmers carry", "farmer carry", "farmers walk", "carry"]),
-        Def(name: "Sled Push", kind: .distanceWeight, equipment: .other, muscles: [.legs], aliases: ["sled"]),
+        Def(name: "Sled Push", kind: .distanceWeight, equipment: .other, muscles: [.quads, .glutes], aliases: ["sled"]),
     ]
 
     struct StarterItem { let name: String; let sets: Int; let low: Int; let high: Int; let rest: Int; var superset = 0; var seconds = 0; var yards = 0.0 }
@@ -92,6 +92,13 @@ enum Library {
     static func ensureCatalog(_ context: ModelContext) {
         let existing = (try? context.fetch(FetchDescriptor<Exercise>())) ?? []
         let names = Set(existing.map { $0.name.lowercased() })
+        // v2 split "legs" into quads, hamstrings and calves for the catalog exercises.
+        if !AppGroup.defaults.bool(forKey: "catalogMusclesV2") {
+            for e in existing where e.musclesRaw.contains(Muscle.legs.rawValue) {
+                if let def = exercises.first(where: { $0.name.lowercased() == e.name.lowercased() }) { e.muscles = def.muscles }
+            }
+            AppGroup.defaults.set(true, forKey: "catalogMusclesV2")
+        }
         let seeded = AppGroup.defaults.stringArray(forKey: "catalogSeeded") ?? []
         var newSeeded = seeded
         for def in exercises where !names.contains(def.name.lowercased()) && !seeded.contains(def.name) {

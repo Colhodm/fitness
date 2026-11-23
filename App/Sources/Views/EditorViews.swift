@@ -46,7 +46,7 @@ struct ExerciseEditorView: View {
                           isOn: { equipment == $0 }) { equipment = $0 }
             }
             Section("Muscles worked") {
-                FlowChips(items: [.chest, .shoulders, .triceps, .back, .biceps, .legs, .glutes, .core], title: \Muscle.title,
+                FlowChips(items: [.chest, .shoulders, .triceps, .back, .biceps, .quads, .hamstrings, .glutes, .calves, .core] + (muscles.contains(.legs) ? [.legs] : []), title: \Muscle.title,
                           isOn: { muscles.contains($0) }) { m in if muscles.contains(m) { muscles.remove(m) } else { muscles.insert(m) } }
             }
         }

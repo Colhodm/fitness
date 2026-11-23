@@ -53,10 +53,25 @@ enum Equipment: String, Codable, CaseIterable, Identifiable {
 }
 
 enum Muscle: String, Codable, CaseIterable, Identifiable {
-    case chest, back, legs, shoulders, biceps, triceps, core, glutes
+    case chest, back, legs, shoulders, biceps, triceps, core, glutes, quads, hamstrings, calves
     var id: String { rawValue }
     var title: String { rawValue.capitalized }
-    var isUpper: Bool { ![.legs, .glutes, .core].contains(self) }
+    var isUpper: Bool { ![.legs, .glutes, .core, .quads, .hamstrings, .calves].contains(self) }
+    var isLower: Bool { [.legs, .glutes, .quads, .hamstrings, .calves].contains(self) }
+    var group: MuscleGroup {
+        switch self {
+        case .legs, .glutes, .quads, .hamstrings, .calves: .legs
+        case .back: .back
+        case .chest: .chest
+        case .shoulders, .biceps, .triceps: .shouldersArms
+        case .core: .core
+        }
+    }
+}
+
+enum MuscleGroup: String, CaseIterable, Identifiable {
+    case legs = "Legs", back = "Back", chest = "Chest", shouldersArms = "Shoulders and arms", core = "Core"
+    var id: String { rawValue }
 }
 
 @Model
@@ -219,6 +234,8 @@ final class SetRecord {
     var distance: Double = 0
     var done: Bool = false
     var edited: Bool = false
+    /// Rate of perceived exertion, 0 = not logged.
+    var rpe: Double = 0
     var completedAt: Date?
     var entry: WorkoutEntry?
 

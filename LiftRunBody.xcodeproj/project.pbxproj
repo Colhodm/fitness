@@ -18,6 +18,7 @@
 		35CBA59C332F3257C936C37C /* LiftRunBodyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE5131A8D2DB2BF0703FF6C /* LiftRunBodyApp.swift */; };
 		406B3E1EDDB22C129C5C607A /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11D6369B37A1DD7BAA521EF /* WidgetSnapshot.swift */; };
 		417FC92B1E224EDBB3EAB79A /* LiftHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45BC47002E01CB050F5C4AE /* LiftHomeView.swift */; };
+		4C29D3F9623E7CD548414BF7 /* LiftStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99B5028F32B8A5C1B16DA18 /* LiftStatsView.swift */; };
 		4EC342672903DA5E7A731745 /* BodyMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BAF532CFA4209ACBF93BC0 /* BodyMath.swift */; };
 		4FD6E4479B6E3C17E3E42C9F /* HealthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242798B600CDDAAF597E22AD /* HealthStore.swift */; };
 		51EFF80B74CDAA78FCFC8C6F /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF5254BD6DE7D62847F23D1 /* SampleData.swift */; };
@@ -105,6 +106,7 @@
 		B45BC47002E01CB050F5C4AE /* LiftHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftHomeView.swift; sourceTree = "<group>"; };
 		B878697B8226BBC101263338 /* ExerciseHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseHistoryView.swift; sourceTree = "<group>"; };
 		B97E0D74DAC8FC58ECE3BE14 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		B99B5028F32B8A5C1B16DA18 /* LiftStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftStatsView.swift; sourceTree = "<group>"; };
 		C159F8BAE6F0C553B6CCF673 /* RestTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimer.swift; sourceTree = "<group>"; };
 		C91F78C53F87940A852BF442 /* RunsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunsViews.swift; sourceTree = "<group>"; };
 		CC56F3D77439454BB3D269DB /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -173,6 +175,7 @@
 				284F87D0090F8E16B9F3A85A /* EditorViews.swift */,
 				B878697B8226BBC101263338 /* ExerciseHistoryView.swift */,
 				B45BC47002E01CB050F5C4AE /* LiftHomeView.swift */,
+				B99B5028F32B8A5C1B16DA18 /* LiftStatsView.swift */,
 				FF802297A1EE43D57B1BFBB5 /* OnboardingImport.swift */,
 				DFD4966F6D10D9993D6B2736 /* RootView.swift */,
 				C91F78C53F87940A852BF442 /* RunsViews.swift */,
@@ -398,6 +401,7 @@
 				76657165AD11617BA11DABA2 /* Library.swift in Sources */,
 				417FC92B1E224EDBB3EAB79A /* LiftHomeView.swift in Sources */,
 				35CBA59C332F3257C936C37C /* LiftRunBodyApp.swift in Sources */,
+				4C29D3F9623E7CD548414BF7 /* LiftStatsView.swift in Sources */,
 				8E09C29441476D627FA918EC /* Models.swift in Sources */,
 				9589159C4D88CD0995CBFA96 /* NotesImporter.swift in Sources */,
 				57AF585C3CC7257754C2A4BE /* OnboardingImport.swift in Sources */,

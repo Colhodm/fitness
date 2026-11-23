@@ -11,6 +11,7 @@ enum Route: Hashable {
     case runs
     case settings
     case importNotes
+    case liftStats
 }
 
 final class Router: ObservableObject {
@@ -112,6 +113,7 @@ struct RouteView: View {
         case .runs: RunsListView()
         case .settings: SettingsView()
         case .importNotes: ImportNotesView()
+        case .liftStats: LiftStatsView()
         }
     }
 }
@@ -166,6 +168,7 @@ enum DebugLaunch {
                         ?? (key == "long" ? runs.first { $0.meters > 12_000 } : runs.first { Fmt.runDist($0.meters, decimals: 2) == key })
                     if let run { router.push(.run(run.id)) }
                 }
+            case "stats": router.push(.liftStats)
             case "settings": router.push(.settings)
             case "import": router.push(.importNotes)
             case "newExercise": router.push(.newExercise)

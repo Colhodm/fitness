@@ -34,6 +34,8 @@ final class AppSettings: ObservableObject {
     /// Pounds per week (negative = losing)
     @Published var goalRate: Double { didSet { d.set(goalRate, forKey: "goalRate") } }
     @Published var onboardingDone: Bool { didSet { d.set(onboardingDone, forKey: "onboardingDone") } }
+    /// Lift stats Explore views pinned to Trends, as JSON.
+    @Published var savedStatViews: [String] { didSet { d.set(savedStatViews, forKey: "savedStatViews") } }
 
     init() {
         d.register(defaults: [
@@ -63,6 +65,7 @@ final class AppSettings: ObservableObject {
         goalWeight = d.double(forKey: "goalWeight")
         goalRate = d.double(forKey: "goalRate")
         onboardingDone = d.bool(forKey: "onboardingDone")
+        savedStatViews = d.stringArray(forKey: "savedStatViews") ?? []
     }
 
     static let allPlatesLb: [Double] = [45, 35, 25, 10, 5, 2.5]

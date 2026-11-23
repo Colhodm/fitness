@@ -7,6 +7,8 @@ struct TrendsView: View {
     @Query(sort: \Workout.startedAt) private var workouts: [Workout]
     @Query private var exercises: [Exercise]
     @State private var range: ChartRange = .m3
+    @State private var drill: StatDrill?
+    @ObservedObject private var settings = AppSettings.shared
 
     private var finished: [Workout] { workouts.filter { $0.endedAt != nil } }
 
@@ -27,6 +29,13 @@ struct TrendsView: View {
                 .padding(2).background(Palette.card, in: Capsule())
             }
             .padding(.top, 8)
+            let saved = settings.savedStatViews.compactMap { s in ExploreConfig.decode(s).map { (s, $0) } }
+            if !saved.isEmpty {
+                let data = StatsData(workouts: workouts, weights: health.weights)
+                ForEach(saved, id: \.0) { json, config in
+                    ExploreChartCard(config: config, data: data, onRemove: { settings.savedStatViews.removeAll { $0 == json } }) { drill = $0 }
+                }
+            }
             if finished.count < 4 {
                 NoticeCard(icon: "chart.line.uptrend.xyaxis", tint: Palette.orange, title: "Trends need a couple of weeks",
                            message: "Relative strength and training load show up after a few workouts. Weight vs. lean mass uses Apple Health.")
@@ -37,6 +46,7 @@ struct TrendsView: View {
             if !trend.isEmpty { weightVsLean(trend) }
         }
         .toolbar(.hidden, for: .navigationBar)
+        .sheet(item: $drill) { StatDrillSheet(drill: $0) }
     }
 
     // MARK: Relative strength

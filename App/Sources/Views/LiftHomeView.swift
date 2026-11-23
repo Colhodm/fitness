@@ -22,7 +22,7 @@ struct LiftHomeView: View {
             let pass: Bool = switch filter {
             case "All": true
             case "Arms": m.contains(.biceps) || m.contains(.triceps)
-            case "Legs": m.contains(.legs) || m.contains(.glutes)
+            case "Legs": m.contains { $0.isLower }
             default: m.contains(Muscle(rawValue: filter.lowercased()) ?? .core)
             }
             guard pass else { return false }
@@ -39,7 +39,10 @@ struct LiftHomeView: View {
     var body: some View {
         let next = Analytics.nextRoutine(routines, workouts: finished)
         Screen {
-            LargeTitle(title: "Lift", trailing: AnyView(CircleIconButton(system: "plus", tint: Palette.orange) { router.push(.newExercise) }))
+            LargeTitle(title: "Lift", trailing: AnyView(HStack(spacing: 10) {
+                CircleIconButton(system: "chart.bar.xaxis", tint: Palette.orange) { router.push(.liftStats) }
+                CircleIconButton(system: "plus", tint: Palette.orange) { router.push(.newExercise) }
+            }))
             SectionHeader(title: "Routines", trailing: routines.isEmpty ? nil : "Edit") {
                 router.push(.routine((next ?? routines.first)?.persistentModelID))
             }
@@ -95,6 +98,7 @@ struct LiftHomeView: View {
                 }
             }
         }
+        .navigationTitle("Lift")
         .toolbar(.hidden, for: .navigationBar)
     }
 

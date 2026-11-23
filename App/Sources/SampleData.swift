@@ -163,7 +163,9 @@ enum SampleLifting {
                     switch ex.kind {
                     case .timed: s.seconds = st.secs + (i == 0 ? 0 : -Int(rng.range(0, 12)))
                     case .distanceWeight: s.weight = st.w; s.distance = item.targetDistance; s.reps = 1
-                    default: s.weight = st.w; s.reps = st.reps[min(i, st.reps.count - 1)]
+                    default:
+                        s.weight = st.w; s.reps = st.reps[min(i, st.reps.count - 1)]
+                        if rng.next() < 0.7 { s.rpe = min(10, (7 + rng.range(0, 3.5)).rounded(.down) + Double(i / 2)) }
                     }
                     s.done = true; s.completedAt = date.addingTimeInterval(Double(i) * 150)
                     s.entry = entry

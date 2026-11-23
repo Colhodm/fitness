@@ -88,6 +88,7 @@ struct SetKeypad: View {
                     .buttonStyle(.plain)
                 }
             }
+            if target.field == .reps { rpeRow }
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
                 ForEach(["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "⌫"], id: \.self) { k in
                     key(k, height: 46, big: true) { press(k) }
@@ -109,6 +110,24 @@ struct SetKeypad: View {
         .background(Palette.card.ignoresSafeArea(edges: .bottom))
         .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20))
         .onChange(of: target) { _, _ in buffer = "" }
+    }
+
+    private var rpeRow: some View {
+        HStack(spacing: 6) {
+            Text("RPE").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.secondary).frame(width: 34, alignment: .leading)
+            ForEach([6.0, 7, 8, 9, 10], id: \.self) { r in
+                let on = rec.rpe == r
+                Button {
+                    rec.rpe = on ? 0 : r
+                    session.save()
+                } label: {
+                    Text(Fmt.num(r)).font(.system(size: 15, weight: .semibold)).foregroundStyle(on ? .black : .white)
+                        .frame(maxWidth: .infinity).frame(height: 32)
+                        .background(on ? Palette.orange : Palette.field, in: RoundedRectangle(cornerRadius: 8))
+                }
+                .buttonStyle(.plain)
+            }
+        }
     }
 
     private var plateMath: some View {
