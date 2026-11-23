@@ -110,8 +110,10 @@ struct TreadmillImportView: View {
             time = s >= 3600 ? String(format: "%d:%02d:%02d", s / 3600, s / 60 % 60, s % 60) : String(format: "%d:%02d", s / 60, s % 60)
             start = Date().addingTimeInterval(-Double(s))
         }
-        if let d = r.distance { distance = Fmt.num(d, maxDecimals: 2) }
-        if let k = r.distanceIsKm { km = k }
+        if let d = r.distance {
+            distance = Fmt.num(d, maxDecimals: 2)
+            if let k = r.distanceIsKm { km = k }
+        }
         if let c = r.calories { calories = "\(c)" }
         if r.speed != nil || (r.seconds != nil && r.distance != nil) { isWalk = TreadmillParser.looksLikeWalk(r) }
     }
