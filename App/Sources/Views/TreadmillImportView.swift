@@ -115,7 +115,7 @@ struct TreadmillImportView: View {
         Task {
             let ok = await health.saveCardio(walk: isWalk, start: start, duration: Double(s), meters: m, kcal: Double(calories) ?? 0)
             saving = false
-            if ok { dismiss() } else { error = "Couldn't save to Apple Health. Turn on Workouts in Settings › Health › Data Access & Devices › Lift + Run + Body." }
+            if ok { dismiss() } else { error = "Couldn't save to Apple Health. In Settings › Health › Data Access & Devices › Lift + Run + Body, turn on writing Workouts, Walking + Running Distance and Active Energy." }
         }
     }
 }

@@ -372,14 +372,17 @@ final class HealthStore: ObservableObject {
         let config = HKWorkoutConfiguration()
         config.activityType = walk ? .walking : .running
         config.locationType = .indoor
+        // Fail rather than save a workout missing the distance or calories the user entered.
+        if meters > 0, store.authorizationStatus(for: HKQuantityType(.distanceWalkingRunning)) != .sharingAuthorized { return false }
+        if kcal > 0, store.authorizationStatus(for: HKQuantityType(.activeEnergyBurned)) != .sharingAuthorized { return false }
         let builder = HKWorkoutBuilder(healthStore: store, configuration: config, device: .local())
         do {
             try await builder.beginCollection(at: start)
             var samples: [HKSample] = []
-            if meters > 0, store.authorizationStatus(for: HKQuantityType(.distanceWalkingRunning)) == .sharingAuthorized {
+            if meters > 0 {
                 samples.append(HKQuantitySample(type: HKQuantityType(.distanceWalkingRunning), quantity: HKQuantity(unit: .meter(), doubleValue: meters), start: start, end: end))
             }
-            if kcal > 0, store.authorizationStatus(for: HKQuantityType(.activeEnergyBurned)) == .sharingAuthorized {
+            if kcal > 0 {
                 samples.append(HKQuantitySample(type: HKQuantityType(.activeEnergyBurned), quantity: HKQuantity(unit: .kilocalorie(), doubleValue: kcal), start: start, end: end))
             }
             if !samples.isEmpty { try await builder.addSamples(samples) }
