@@ -175,6 +175,9 @@ enum Wrapped {
     /// Today shows a card for the whole of December until you watch it.
     static var showTodayCard: Bool {
         let now = Date()
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-wrappedUnlocked") { return AppSettings.shared.wrappedSeenYear < currentYear }
+        #endif
         return isUnlocked(currentYear, now: now) && Calendar.current.component(.month, from: now) == 12
             && AppSettings.shared.wrappedSeenYear < currentYear
     }
