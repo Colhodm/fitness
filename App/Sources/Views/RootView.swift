@@ -131,6 +131,8 @@ struct ActiveWorkoutBar: View {
                 Spacer()
                 if rest.isRunning {
                     Text("Rest \(Fmt.clock(Int(rest.remaining.rounded(.up))))").font(.system(size: 15, weight: .semibold)).monospacedDigit().foregroundStyle(Palette.orange)
+                } else if let w = session.workout, w.isPastLog {
+                    Text(Fmt.date(w.startedAt, "MMM d")).font(.system(size: 15, weight: .semibold))
                 } else if let start = session.workout?.startedAt {
                     Text(start, style: .timer).font(.system(size: 15, weight: .semibold)).monospacedDigit()
                 }
