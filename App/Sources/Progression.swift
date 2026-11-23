@@ -54,7 +54,6 @@ enum Progression {
         if plan.progressed {
             let blewPast = atWorking(last).filter { $0.reps >= c.repHigh + 3 }.count >= c.sets
             g.status = blewPast ? .tooEasy : .ready
-            if blewPast { g.nextWeight = assisted ? max(0, working - 2 * c.increment) : working + 2 * c.increment }
             return g
         }
         if plan.heldByRPE { g.status = .grind; return g }
@@ -97,7 +96,7 @@ enum Progression {
         let next = weightText(g.nextWeight, kind: kind)
         switch g.status {
         case .ready: return "Ready: \(next) next session"
-        case .tooEasy: return "Too easy: jump to \(next)"
+        case .tooEasy: return "Ready: \(next) next session"
         case .stalled: return "Stalled at \(weightText(g.weight, kind: kind))"
         case .grind: return "Hold \(weightText(g.weight, kind: kind)) once more"
         case .start: return "New weight: \(weightText(g.weight, kind: kind))"
@@ -108,7 +107,7 @@ enum Progression {
     static func detail(_ g: Guidance, kind: ExerciseKind) -> String {
         switch g.status {
         case .ready: return "You hit \(g.repHigh)+ on all \(g.sets) sets. Start at \(g.repLow) reps and build back to \(g.repHigh)."
-        case .tooEasy: return "Every set went \(g.repHigh + 3)+ reps, so a double step keeps you in the \(g.repLow)–\(g.repHigh) range."
+        case .tooEasy: return "Every set went \(g.repHigh + 3)+ reps. If \(weightText(g.nextWeight, kind: kind)) still feels light, jump another step so you land in \(g.repLow)–\(g.repHigh)."
         case .stalled:
             let deload = kind == .assisted ? g.weight * 1.1 : g.weight * 0.9
             return "No rep gains in 3 sessions. Hold \(weightText(g.weight, kind: kind)) once more, or drop to \(weightText((deload / 5).rounded() * 5, kind: kind)) and build back up."
