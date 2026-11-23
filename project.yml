@@ -52,6 +52,8 @@ targets:
         UIRequiredDeviceCapabilities: [healthkit]
         NSHealthShareUsageDescription: Reads weight and body composition from your scale (e.g. Renpho), and runs with routes, distance and heart rate.
         NSHealthUpdateUsageDescription: Saves your lifting sessions as strength training workouts and manual weigh-ins to Apple Health.
+        NSCameraUsageDescription: Takes progress photos. They stay in this app on this iPhone, not in your Photos library.
+        NSFaceIDUsageDescription: Locks your progress photos with Face ID.
         CFBundleURLTypes:
           - CFBundleURLName: liftrunbody
             CFBundleURLSchemes: [liftrunbody]

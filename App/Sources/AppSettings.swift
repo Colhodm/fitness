@@ -36,6 +36,14 @@ final class AppSettings: ObservableObject {
     @Published var onboardingDone: Bool { didSet { d.set(onboardingDone, forKey: "onboardingDone") } }
     /// Lift stats Explore views pinned to Trends, as JSON.
     @Published var savedStatViews: [String] { didSet { d.set(savedStatViews, forKey: "savedStatViews") } }
+    @Published var photoLock: Bool { didSet { d.set(photoLock, forKey: "photoLock") } }
+    /// Off by default: progress photos are excluded from iCloud/iTunes backup.
+    @Published var photoBackup: Bool { didSet { d.set(photoBackup, forKey: "photoBackup") } }
+    /// 0 = off
+    @Published var photoReminderWeeks: Int { didSet { d.set(photoReminderWeeks, forKey: "photoReminderWeeks") } }
+    /// Minutes after midnight.
+    @Published var photoReminderMinutes: Int { didSet { d.set(photoReminderMinutes, forKey: "photoReminderMinutes") } }
+    @Published var wrappedSeenYear: Int { didSet { d.set(wrappedSeenYear, forKey: "wrappedSeenYear") } }
 
     init() {
         d.register(defaults: [
@@ -46,6 +54,7 @@ final class AppSettings: ObservableObject {
             "upperIncrement": 5.0, "lowerIncrement": 10.0,
             "weeklyLiftGoal": 4, "weeklyRunGoal": 15.0, "goalWeight": 0.0, "goalRate": -0.5,
             "onboardingDone": false,
+            "photoLock": false, "photoBackup": false, "photoReminderWeeks": 2, "photoReminderMinutes": 480, "wrappedSeenYear": 0,
         ])
         unit = WeightUnit(rawValue: d.string(forKey: "unit") ?? "lb") ?? .lb
         barWeightLb = d.double(forKey: "barWeightLb")
@@ -66,6 +75,11 @@ final class AppSettings: ObservableObject {
         goalRate = d.double(forKey: "goalRate")
         onboardingDone = d.bool(forKey: "onboardingDone")
         savedStatViews = d.stringArray(forKey: "savedStatViews") ?? []
+        photoLock = d.bool(forKey: "photoLock")
+        photoBackup = d.bool(forKey: "photoBackup")
+        photoReminderWeeks = d.integer(forKey: "photoReminderWeeks")
+        photoReminderMinutes = d.integer(forKey: "photoReminderMinutes")
+        wrappedSeenYear = d.integer(forKey: "wrappedSeenYear")
     }
 
     static let allPlatesLb: [Double] = [45, 35, 25, 10, 5, 2.5]

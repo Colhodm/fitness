@@ -7,6 +7,7 @@ struct SettingsView: View {
     @EnvironmentObject var router: Router
     @Environment(\.modelContext) private var context
     @State private var editingRest = false
+    @State private var wrappedYear: YearItem?
 
     var body: some View {
         Form {
@@ -70,6 +71,31 @@ struct SettingsView: View {
                     HStack { Text("Goal rate"); Spacer(); Text("\(Fmt.signed(Units.display(settings.goalRate), decimals: 2)) \(Units.unitLabel)/wk").foregroundStyle(Palette.secondary) }
                 }
             }
+            Section("Progress photos") {
+                Toggle("Lock with Face ID", isOn: $settings.photoLock).tint(Palette.cyan)
+                Toggle("Include in iCloud backup", isOn: $settings.photoBackup).tint(Palette.cyan)
+                Picker("Reminder", selection: $settings.photoReminderWeeks) {
+                    Text("Off").tag(0)
+                    Text("Every week").tag(1)
+                    Text("Every 2 weeks").tag(2)
+                    Text("Every 4 weeks").tag(4)
+                }
+                if settings.photoReminderWeeks > 0 {
+                    DatePicker("Reminder time", selection: reminderTime, displayedComponents: .hourAndMinute)
+                }
+            }
+            Section {
+                if Wrapped.isUnlocked(Wrapped.currentYear) {
+                    Button("Your \(String(Wrapped.currentYear)) in training") { wrappedYear = YearItem(year: Wrapped.currentYear) }
+                } else {
+                    Button("Preview \(String(Wrapped.currentYear)) so far") { wrappedYear = YearItem(year: Wrapped.currentYear) }
+                }
+                Button("Your \(String(Wrapped.currentYear - 1)) in training") { wrappedYear = YearItem(year: Wrapped.currentYear - 1) }
+            } header: {
+                Text("Your year")
+            } footer: {
+                if !Wrapped.isUnlocked(Wrapped.currentYear) { Text("Your \(String(Wrapped.currentYear)) unlocks Dec 1.") }
+            }
             Section("Data") {
                 Button { Task { await health.requestAccess() } } label: {
                     HStack {
@@ -102,6 +128,19 @@ struct SettingsView: View {
         .navigationBarTitleDisplayMode(.large)
         .onChange(of: settings.unit) { _, _ in WidgetSync.shared.refresh() }
         .onChange(of: settings.weeklyLiftGoal) { _, _ in WidgetSync.shared.refresh() }
+        .onChange(of: settings.photoBackup) { _, _ in PhotoStore.applyBackupSetting() }
+        .onChange(of: settings.photoReminderWeeks) { _, _ in PhotoStore.scheduleReminder(context: context) }
+        .onChange(of: settings.photoReminderMinutes) { _, _ in PhotoStore.scheduleReminder(context: context) }
+        .fullScreenCover(item: $wrappedYear) { WrappedView(year: $0.year) }
+    }
+
+    private var reminderTime: Binding<Date> {
+        Binding(
+            get: { Calendar.current.startOfDay(for: Date()).addingTimeInterval(Double(settings.photoReminderMinutes) * 60) },
+            set: {
+                let c = Calendar.current.dateComponents([.hour, .minute], from: $0)
+                settings.photoReminderMinutes = (c.hour ?? 8) * 60 + (c.minute ?? 0)
+            })
     }
 
     private func togglePlate(_ p: Double) {
@@ -111,4 +150,9 @@ struct SettingsView: View {
             if let i = settings.platesKg.firstIndex(of: p) { settings.platesKg.remove(at: i) } else { settings.platesKg.append(p) }
         }
     }
+}
+
+struct YearItem: Identifiable {
+    let year: Int
+    var id: Int { year }
 }

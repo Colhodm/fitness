@@ -35,6 +35,10 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Takes progress photos. They stay in this app on this iPhone, not in your Photos library.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Locks your progress photos with Face ID.</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Reads weight and body composition from your scale (e.g. Renpho), and runs with routes, distance and heart rate.</string>
 	<key>NSHealthUpdateUsageDescription</key>

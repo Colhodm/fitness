@@ -12,6 +12,8 @@ enum Route: Hashable {
     case settings
     case importNotes
     case liftStats
+    case photos
+    case photoCompare(String)
 }
 
 final class Router: ObservableObject {
@@ -69,8 +71,11 @@ struct RootView: View {
             await health.refresh()
             WidgetSync.shared.refresh()
             #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-sampleData") { PhotoStore.seedSamples(context) }
             DebugLaunch.apply(router: router, context: context)
             #endif
+            Wrapped.scheduleNotification()
+            PhotoStore.scheduleReminder(context: context)
         }
         .onChange(of: manual.map(\.savedToHealth)) { _, _ in
             health.setManual(manual)
@@ -114,6 +119,8 @@ struct RouteView: View {
         case .settings: SettingsView()
         case .importNotes: ImportNotesView()
         case .liftStats: LiftStatsView()
+        case .photos: ProgressPhotosView()
+        case .photoCompare(let pose): PhotoCompareView(pose: PhotoPose(rawValue: pose) ?? .front)
         }
     }
 }
@@ -169,6 +176,8 @@ enum DebugLaunch {
                     if let run { router.push(.run(run.id)) }
                 }
             case "stats": router.push(.liftStats)
+            case "photos": router.push(.photos)
+            case "compare": router.push(.photos); router.push(.photoCompare("front"))
             case "settings": router.push(.settings)
             case "import": router.push(.importNotes)
             case "newExercise": router.push(.newExercise)

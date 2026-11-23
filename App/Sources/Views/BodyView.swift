@@ -5,7 +5,9 @@ import SwiftUI
 struct BodyView: View {
     @EnvironmentObject var health: HealthStore
     @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var router: Router
     @Environment(\.modelContext) private var context
+    @Query(sort: \ProgressPhoto.date, order: .reverse) private var photos: [ProgressPhoto]
     @State private var range: ChartRange = .m1
     @State private var logging = false
 
@@ -48,12 +50,35 @@ struct BodyView: View {
                 trendCard(points, stale: staleDays != nil)
                 if staleDays == nil {
                     compositionGrid(points)
-                    recentList
                 }
             }
+            photosCard
+            if !points.isEmpty && staleDays == nil { recentList }
         }
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $logging) { LogWeightSheet().presentationDetents([.height(300)]) }
+    }
+
+    private var photosCard: some View {
+        let last = photos.first
+        let due = PhotoStore.nextDue(after: last?.date)
+        let days = due.map { Calendar.current.dateComponents([.day], from: Calendar.current.startOfDay(for: Date()), to: Calendar.current.startOfDay(for: $0)).day ?? 0 }
+        return Button { router.push(.photos) } label: {
+            Card(padding: 14) {
+                HStack(spacing: 12) {
+                    PhotoImage(photo: AppSettings.shared.photoLock ? nil : last).frame(width: 44, height: 58).clipShape(RoundedRectangle(cornerRadius: 8))
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Progress photos").font(.system(size: 17, weight: .semibold))
+                        Text(last == nil ? "Front, side and back, kept only on this iPhone"
+                             : (days.map { $0 > 0 ? "Next photo due in \($0) day\($0 == 1 ? "" : "s")" : "Photo day" } ?? "Last on \(Fmt.date(last!.date, "MMM d"))"))
+                            .font(.system(size: 13)).foregroundStyle(Palette.secondary)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.tertiary)
+                }
+            }
+        }
+        .buttonStyle(.plain)
     }
 
     private func staleCard(days: Int, last: BodySample) -> some View {

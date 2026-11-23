@@ -11,10 +11,28 @@ struct TodayView: View {
 
     private var finished: [Workout] { workouts.filter { $0.endedAt != nil } }
 
+    @State private var showWrapped = false
+
     var body: some View {
         Screen {
             LargeTitle(title: "Today", eyebrow: Fmt.date(Date(), "EEEE, MMM d"),
                        trailing: finished.isEmpty ? nil : AnyView(CircleIconButton(system: "gearshape") { router.push(.settings) }))
+            if Wrapped.showTodayCard {
+                Button { showWrapped = true } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "sparkles").font(.system(size: 20, weight: .bold))
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Your \(String(Wrapped.currentYear)) in training is here").font(.system(size: 17, weight: .bold))
+                            Text("Volume, PRs, miles and how you showed up").font(.system(size: 13, weight: .medium)).opacity(0.75)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right").font(.system(size: 13, weight: .bold))
+                    }
+                    .foregroundStyle(.black).padding(16).frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Palette.orange, in: RoundedRectangle(cornerRadius: 16))
+                }
+                .buttonStyle(.plain)
+            }
             if finished.isEmpty {
                 FirstDayView()
             } else {
@@ -25,6 +43,10 @@ struct TodayView: View {
             }
         }
         .toolbar(.hidden, for: .navigationBar)
+        .fullScreenCover(isPresented: $showWrapped) { WrappedView(year: Wrapped.currentYear) }
+        #if DEBUG
+        .onAppear { if ProcessInfo.processInfo.arguments.contains("-wrapped") { showWrapped = true } }
+        #endif
     }
 
     // MARK: Trend weight

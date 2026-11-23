@@ -281,6 +281,36 @@ final class ManualWeighIn {
     }
 }
 
+enum PhotoPose: String, CaseIterable, Identifiable, Codable {
+    case front, side, back
+    var id: String { rawValue }
+    var title: String { rawValue.capitalized }
+}
+
+/// A progress photo. The image lives in the app's own storage (see PhotoStore), stamped with that day's numbers.
+@Model
+final class ProgressPhoto {
+    var uuid: UUID = UUID()
+    var date: Date = Date()
+    var poseRaw: String = PhotoPose.front.rawValue
+    var fileName: String = ""
+    /// Pounds; 0 = unknown.
+    var weight: Double = 0
+    /// Fraction (0.178); 0 = unknown.
+    var bodyFat: Double = 0
+    var leanMass: Double = 0
+    var bench1RM: Double = 0
+    var squat1RM: Double = 0
+
+    init(date: Date, pose: PhotoPose, fileName: String) {
+        self.date = date
+        self.poseRaw = pose.rawValue
+        self.fileName = fileName
+    }
+
+    var pose: PhotoPose { PhotoPose(rawValue: poseRaw) ?? .front }
+}
+
 enum AppSchema {
-    static let models: [any PersistentModel.Type] = [Exercise.self, Routine.self, RoutineItem.self, Workout.self, WorkoutEntry.self, SetRecord.self, RunTag.self, ManualWeighIn.self]
+    static let models: [any PersistentModel.Type] = [Exercise.self, Routine.self, RoutineItem.self, Workout.self, WorkoutEntry.self, SetRecord.self, RunTag.self, ManualWeighIn.self, ProgressPhoto.self]
 }
