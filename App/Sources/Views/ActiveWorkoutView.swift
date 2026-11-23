@@ -169,10 +169,13 @@ struct EntryCard: View {
             let sets = entry.workingSets
             let top = entry.repHigh
             let assisted = ex.kind == .assisted
-            let counts: (SetRecord) -> Bool = { s in assisted ? s.weight <= p.weight + 0.01 : s.weight >= p.weight - 0.01 }
             let done = sets.filter(\.done)
+            let logged = done.map(\.weight)
+            let base = logged.isEmpty ? p.weight : (assisted ? logged.min()! : logged.max()!)
+            let counts: (SetRecord) -> Bool = { s in assisted ? s.weight <= base + 0.01 : s.weight >= base - 0.01 }
+            let grind = done.contains { counts($0) && $0.rpe > 9 }
             let short = done.filter(counts).reduce(0) { $0 + max(0, top - $1.reps) } + done.filter { !counts($0) }.count * top
-            let next = assisted ? max(0, p.weight - entry.increment) : p.weight + entry.increment
+            let next = assisted ? max(0, base - entry.increment) : base + entry.increment
             let allDone = !sets.isEmpty && done.count == sets.count
             HStack(spacing: 6) {
                 ForEach(Array(sets.enumerated()), id: \.offset) { _, s in
@@ -186,6 +189,7 @@ struct EntryCard: View {
                 Spacer(minLength: 4)
                 Group {
                     if done.isEmpty { Text("Hit \(top) on every set to move up") }
+                    else if short == 0 && grind { Text("Above RPE 9: hold \(Progression.weightText(base, kind: ex.kind))").foregroundColor(Palette.yellow) }
                     else if short == 0 && allDone { Text("Next time: \(Progression.weightText(next, kind: ex.kind))").foregroundColor(Palette.orange) }
                     else if short == 0 { Text("On track for \(Progression.weightText(next, kind: ex.kind))") }
                     else { Text("\(short) rep\(short == 1 ? "" : "s") short so far") }
