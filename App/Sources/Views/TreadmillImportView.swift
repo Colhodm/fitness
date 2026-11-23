@@ -94,15 +94,18 @@ struct TreadmillImportView: View {
     }
 
     private func use(_ img: UIImage) async {
+        let replacing = image != nil
         image = img
         reading = true
         let r = TreadmillParser.parse(await TreadmillOCR.recognize(img))
         reading = false
         readSomething = r.seconds != nil || r.distance != nil || r.calories != nil
-        // A new photo replaces the previous photo's numbers rather than mixing with them.
-        time = ""
-        distance = ""
-        calories = ""
+        // A replacement photo's numbers replace the previous photo's rather than mixing with them.
+        if replacing {
+            time = ""
+            distance = ""
+            calories = ""
+        }
         if let s = r.seconds {
             time = s >= 3600 ? String(format: "%d:%02d:%02d", s / 3600, s / 60 % 60, s % 60) : String(format: "%d:%02d", s / 60, s % 60)
             start = Date().addingTimeInterval(-Double(s))
