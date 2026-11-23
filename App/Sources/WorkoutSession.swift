@@ -277,7 +277,7 @@ final class WorkoutSession: ObservableObject {
     func finish() async {
         guard let w = workout, let context else { return }
         rest.skip()
-        w.endedAt = w.isPastLog ? w.startedAt.addingTimeInterval(Double(w.pastDurationMinutes) * 60) : Date()
+        w.endedAt = w.isPastLog ? min(w.startedAt.addingTimeInterval(Double(w.pastDurationMinutes) * 60), Date()) : Date()
         finishedPlan = w.sortedEntries.compactMap { e in
             e.exercise.map { ($0, max(1, e.workingSets.count), e.supersetGroup, e.targetSeconds, e.targetDistance) }
         }
