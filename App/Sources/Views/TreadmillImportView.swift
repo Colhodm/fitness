@@ -99,6 +99,10 @@ struct TreadmillImportView: View {
         let r = TreadmillParser.parse(await TreadmillOCR.recognize(img))
         reading = false
         readSomething = r.seconds != nil || r.distance != nil || r.calories != nil
+        // A new photo replaces the previous photo's numbers rather than mixing with them.
+        time = ""
+        distance = ""
+        calories = ""
         if let s = r.seconds {
             time = s >= 3600 ? String(format: "%d:%02d:%02d", s / 3600, s / 60 % 60, s % 60) : String(format: "%d:%02d", s / 60, s % 60)
             start = Date().addingTimeInterval(-Double(s))
@@ -106,7 +110,7 @@ struct TreadmillImportView: View {
         if let d = r.distance { distance = Fmt.num(d, maxDecimals: 2) }
         if let k = r.distanceIsKm { km = k }
         if let c = r.calories { calories = "\(c)" }
-        isWalk = TreadmillParser.looksLikeWalk(r)
+        if r.speed != nil || (r.seconds != nil && r.distance != nil) { isWalk = TreadmillParser.looksLikeWalk(r) }
     }
 
     private func save() {
