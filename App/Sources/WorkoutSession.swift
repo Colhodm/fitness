@@ -285,7 +285,7 @@ final class WorkoutSession: ObservableObject {
             for s in e.sets where !s.done { context.delete(s) }
         }
         for e in w.entries where !e.sets.contains(where: \.done) { context.delete(e) }
-        if !w.isPastLog { advanceTimedTargets(in: w) }
+        if !hasLaterRoutineWorkout(w) { advanceTimedTargets(in: w) }
         save()
         if w.entries.isEmpty {
             context.delete(w)
@@ -303,6 +303,14 @@ final class WorkoutSession: ObservableObject {
     }
 
     /// Timed holds progress by raising the routine's own target, so each routine keeps its own and edits in the routine editor win.
+    /// A backdated workout only moves routine targets if no newer workout of that routine exists.
+    private func hasLaterRoutineWorkout(_ w: Workout) -> Bool {
+        guard let context, let routine = w.routine else { return false }
+        let start = w.startedAt
+        let later = (try? context.fetch(FetchDescriptor<Workout>(predicate: #Predicate { $0.startedAt > start }))) ?? []
+        return later.contains { $0 !== w && $0.routine === routine && $0.endedAt != nil }
+    }
+
     private func advanceTimedTargets(in w: Workout) {
         guard let routine = w.routine else { return }
         let entries = w.sortedEntries
