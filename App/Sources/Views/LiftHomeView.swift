@@ -9,6 +9,7 @@ struct LiftHomeView: View {
     @Query(sort: \Exercise.name) private var exercises: [Exercise]
     @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
     @State private var search = ""
+    @State private var loggingPast = false
     @State private var filter = "All"
 
     private let filters = ["All", "Chest", "Back", "Legs", "Shoulders", "Arms", "Core"]
@@ -53,6 +54,20 @@ struct LiftHomeView: View {
                             .padding(.horizontal, 16).frame(height: 50).background(Palette.card, in: RoundedRectangle(cornerRadius: 14))
                     }
                     .buttonStyle(.plain)
+                }
+            }
+            if !session.isActive {
+                Button { loggingPast = true } label: {
+                    Label("Log a past workout", systemImage: "calendar.badge.plus")
+                        .font(.system(size: 15, weight: .semibold)).foregroundStyle(Palette.orange)
+                        .frame(maxWidth: .infinity).frame(height: 40)
+                        .background(Palette.card, in: RoundedRectangle(cornerRadius: 12))
+                }
+                .buttonStyle(.plain)
+                .sheet(isPresented: $loggingPast) {
+                    PastWorkoutSheet(routines: routines) { date, minutes, routine in
+                        session.start(routine: routine, pastDate: date, durationMinutes: minutes)
+                    }
                 }
             }
             SectionHeader(title: "Exercises", trailing: "\(exercises.count) total").padding(.top, 8)
@@ -155,5 +170,46 @@ struct ExerciseRow: View {
         }
         .padding(.horizontal, 16).padding(.vertical, 10)
         .contentShape(Rectangle())
+    }
+}
+
+struct PastWorkoutSheet: View {
+    let routines: [Routine]
+    let onStart: (Date, Int, Routine?) -> Void
+    @Environment(\.dismiss) private var dismiss
+    @State private var date = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+    @State private var minutes = 60
+    @State private var routineIndex = -1
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    DatePicker("Started", selection: $date, in: ...Date()).tint(Palette.orange)
+                    Stepper("Duration  \(minutes) min", value: $minutes, in: 5...240, step: 5)
+                    Picker("Routine", selection: $routineIndex) {
+                        Text("Empty workout").tag(-1)
+                        ForEach(Array(routines.enumerated()), id: \.offset) { i, r in Text(r.name).tag(i) }
+                    }
+                } footer: {
+                    Text("Log sets as usual. There's no rest timer, and the workout is saved at this date and time.")
+                }
+            }
+            .scrollContentBackground(.hidden).background(Color.black)
+            .navigationTitle("Log past workout").navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() }.tint(Palette.orange) }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Start") {
+                        let routine = routines.indices.contains(routineIndex) ? routines[routineIndex] : nil
+                        let (d, m) = (date, minutes)
+                        dismiss()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { onStart(d, m, routine) }
+                    }
+                    .tint(Palette.orange).fontWeight(.semibold)
+                }
+            }
+        }
+        .preferredColorScheme(.dark)
     }
 }

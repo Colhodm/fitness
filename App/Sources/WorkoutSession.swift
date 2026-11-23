@@ -32,8 +32,10 @@ final class WorkoutSession: ObservableObject {
         if let open = try? context.fetch(d).first {
             workout = open
             expanded = firstOpenEntry()?.persistentModelID
-            rest.syncFromShared()
-            startLiveActivity()
+            if !open.isPastLog {
+                rest.syncFromShared()
+                startLiveActivity()
+            }
         }
     }
 
@@ -41,9 +43,12 @@ final class WorkoutSession: ObservableObject {
 
     // MARK: Starting
 
-    func start(routine: Routine?) {
+    /// `pastDate` logs a workout after the fact: no rest timer or Live Activity, and it's saved at that date.
+    func start(routine: Routine?, pastDate: Date? = nil, durationMinutes: Int = 60) {
         guard let context, workout == nil else { isPresented = workout != nil; return }
-        let w = Workout(name: routine.map { "\($0.name)\($0.name.lowercased().hasSuffix("day") ? "" : " Day")" } ?? "Workout", routine: routine)
+        let w = Workout(name: routine.map { "\($0.name)\($0.name.lowercased().hasSuffix("day") ? "" : " Day")" } ?? "Workout",
+                        startedAt: pastDate ?? Date(), routine: routine)
+        if pastDate != nil { w.pastDurationMinutes = max(1, durationMinutes) }
         context.insert(w)
         if let routine {
             for (i, item) in routine.sortedItems.enumerated() {
@@ -56,8 +61,10 @@ final class WorkoutSession: ObservableObject {
         workout = w
         expanded = firstOpenEntry()?.persistentModelID
         isPresented = true
-        requestNotifications()
-        startLiveActivity()
+        if !w.isPastLog {
+            requestNotifications()
+            startLiveActivity()
+        }
     }
 
     func repeatLast(_ last: Workout) {
@@ -102,7 +109,7 @@ final class WorkoutSession: ObservableObject {
         e.repHigh = config.repHigh
         e.increment = config.increment
         e.restSeconds = restSeconds
-        let prior = Analytics.sessions(ex, excluding: w)
+        let prior = Analytics.sessions(ex, excluding: w, before: w.startedAt)
         let last = prior.last
         let plan = Analytics.plan(kind: ex.kind, config: config, last: last)
         // Routine holds already carry their progression (advanceTimedTargets), so don't add it again here.
@@ -135,7 +142,7 @@ final class WorkoutSession: ObservableObject {
     func priorSessions(_ entry: WorkoutEntry) -> [Session] {
         guard let ex = entry.exercise else { return [] }
         if let c = priorCache[ex.persistentModelID] { return c }
-        let s = Analytics.sessions(ex, excluding: workout)
+        let s = Analytics.sessions(ex, excluding: workout, before: workout?.startedAt)
         priorCache[ex.persistentModelID] = s
         return s
     }
@@ -162,7 +169,7 @@ final class WorkoutSession: ObservableObject {
     func log(_ set: SetRecord) {
         guard let entry = set.entry else { return }
         set.done = true
-        set.completedAt = Date()
+        set.completedAt = workout.map { $0.isPastLog ? $0.startedAt : Date() } ?? Date()
         let sets = entry.sortedSets
         if let i = sets.firstIndex(where: { $0 === set }) {
             for later in sets[(i + 1)...] where !later.done && !later.edited && later.isWarmup == set.isWarmup {
@@ -206,7 +213,7 @@ final class WorkoutSession: ObservableObject {
         }
         if let nextEntry { expanded = nextEntry.persistentModelID }
         let anythingLeft = entries.contains { $0.sortedSets.contains { !$0.done } }
-        if AppSettings.shared.autoStartRest, anythingLeft, restSeconds > 0 {
+        if AppSettings.shared.autoStartRest, !w.isPastLog, anythingLeft, restSeconds > 0 {
             rest.start(seconds: loggedWarmup ? min(60, restSeconds) : restSeconds)
         } else {
             pushLiveActivity()
@@ -270,7 +277,7 @@ final class WorkoutSession: ObservableObject {
     func finish() async {
         guard let w = workout, let context else { return }
         rest.skip()
-        w.endedAt = Date()
+        w.endedAt = w.isPastLog ? w.startedAt.addingTimeInterval(Double(w.pastDurationMinutes) * 60) : Date()
         finishedPlan = w.sortedEntries.compactMap { e in
             e.exercise.map { ($0, max(1, e.workingSets.count), e.supersetGroup, e.targetSeconds, e.targetDistance) }
         }
@@ -278,7 +285,7 @@ final class WorkoutSession: ObservableObject {
             for s in e.sets where !s.done { context.delete(s) }
         }
         for e in w.entries where !e.sets.contains(where: \.done) { context.delete(e) }
-        advanceTimedTargets(in: w)
+        if !w.isPastLog { advanceTimedTargets(in: w) }
         save()
         if w.entries.isEmpty {
             context.delete(w)
@@ -404,8 +411,8 @@ final class WorkoutSession: ObservableObject {
     }
 
     func pushLiveActivity() {
-        guard workout != nil else { return }
-        LiveActivityController.shared.update(liveState())
+        guard let w = workout else { return }
+        if !w.isPastLog { LiveActivityController.shared.update(liveState()) }
         bump()
     }
 

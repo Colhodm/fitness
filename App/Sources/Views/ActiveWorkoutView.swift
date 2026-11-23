@@ -90,7 +90,11 @@ struct ActiveWorkoutView: View {
                 Button { session.isPresented = false } label: {
                     HStack(spacing: 6) {
                         Image(systemName: "figure.strengthtraining.traditional").foregroundStyle(Palette.orange)
-                        Text(w.startedAt, style: .timer).monospacedDigit()
+                        if w.isPastLog {
+                            Text(Fmt.date(w.startedAt, "MMM d, h:mm a"))
+                        } else {
+                            Text(w.startedAt, style: .timer).monospacedDigit()
+                        }
                     }
                     .font(.system(size: 15, weight: .semibold))
                     .padding(.horizontal, 12).frame(height: 32).background(Palette.card, in: Capsule())

@@ -156,6 +156,8 @@ final class Workout {
     var endedAt: Date?
     var savedToHealth: Bool = false
     var isImported: Bool = false
+    /// Set when logging a workout after the fact; it ends this many minutes after `startedAt`.
+    var pastDurationMinutes: Int = 0
     var routine: Routine?
     @Relationship(deleteRule: .cascade, inverse: \WorkoutEntry.workout) var entries: [WorkoutEntry] = []
 
@@ -167,6 +169,7 @@ final class Workout {
 
     var sortedEntries: [WorkoutEntry] { entries.sorted { $0.order < $1.order } }
     var duration: TimeInterval { (endedAt ?? Date()).timeIntervalSince(startedAt) }
+    var isPastLog: Bool { pastDurationMinutes > 0 }
     var completedSets: [SetRecord] { entries.flatMap(\.sets).filter { $0.done && !$0.isWarmup } }
     var volume: Double { entries.reduce(0) { $0 + $1.volume } }
 }
