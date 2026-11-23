@@ -784,7 +784,7 @@ struct HabitsTab: View {
         VStack(alignment: .leading, spacing: 12) {
             Card {
                 Text("Training days").font(.system(size: 17, weight: .semibold))
-                Text("Darker means more volume that day · tap a day to open it")
+                Text("Brighter means more volume that day · tap a day to open it")
                     .font(.system(size: 13)).foregroundStyle(Palette.secondary).padding(.bottom, 10)
                 heatmap(start: start, weeks: weeks, byDay: byDay) { day in
                     guard let v = dayVolume[day] else { return 0 }

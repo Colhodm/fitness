@@ -22,7 +22,8 @@ struct ProgressPhotosView: View {
         Screen {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Progress photos").font(.system(size: 34, weight: .bold))
-                Label(settings.photoLock ? "Only on this iPhone · locked with Face ID" : "Only on this iPhone", systemImage: settings.photoLock ? "lock" : "iphone")
+                Label((settings.photoBackup ? "On this iPhone · in iCloud backup" : "Only on this iPhone") + (settings.photoLock ? " · locked with Face ID" : ""),
+                      systemImage: settings.photoLock ? "lock" : "iphone")
                     .font(.system(size: 13)).foregroundStyle(Palette.secondary)
             }
             if locked {
@@ -322,8 +323,9 @@ struct PhotoCaptureView: View {
             }
             if let last, showOutline {
                 Text("Match the outline from \(Fmt.date(last.date, "MMM d")) · same spot, morning light")
-                    .font(.system(size: 13, weight: .medium)).padding(.horizontal, 12).frame(height: 30)
-                    .background(.black.opacity(0.6), in: Capsule())
+                    .font(.system(size: 13, weight: .medium)).multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 12).padding(.vertical, 6)
+                    .background(.black.opacity(0.6), in: RoundedRectangle(cornerRadius: 12))
             }
         }
         .padding(.horizontal, 16).padding(.top, 8)
@@ -345,7 +347,7 @@ struct PhotoCaptureView: View {
                         .stroke(Palette.cyan, style: StrokeStyle(lineWidth: 1.5, dash: [6, 5]))
                         .frame(width: w * 0.5, height: h * 0.6).position(x: w / 2, y: h * 0.6)
                 }
-                guideLine("Top of head", y: g.size.height * 0.1, width: g.size.width)
+                guideLine("Top of head", y: g.size.height * 0.17, width: g.size.width)
                 guideLine("Feet", y: g.size.height * 0.92, width: g.size.width)
             }
         }
