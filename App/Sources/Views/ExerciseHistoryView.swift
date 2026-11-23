@@ -77,10 +77,9 @@ struct ExerciseHistoryView: View {
             } else {
                 chartCard(shown, all: all)
                 switch exercise.kind {
-                case .weightReps: repPRs(all)
-                case .bodyweight: bodyweightReady(all)
+                case .weightReps: nextStep(all); repPRs(all)
+                case .bodyweight, .assisted: nextStep(all)
                 case .timed, .distanceWeight: nextTarget(all)
-                case .assisted: EmptyView()
                 }
                 if exercise.kind != .weightReps { bests(all) }
                 sessionList(all)
@@ -253,6 +252,61 @@ struct ExerciseHistoryView: View {
     }
 
     // MARK: Bodyweight / timed / carry
+    @ViewBuilder private func nextStep(_ all: [Session]) -> some View {
+        if let last = all.last, let g = Progression.guidance(kind: exercise.kind, config: ProgressionConfig(last.entry), sessions: all) {
+            let kind = exercise.kind
+            let points = Array(g.ladder.enumerated())
+            let projected: [(Int, Int)] = g.status == .building ? (g.sessionsLeft.map { left in
+                (0...min(left, 6)).map { i in (points.count - 1 + i, min(g.target, g.lastTotal + Int((Double(i) * (g.perSession ?? 0)).rounded()))) }
+            } ?? []) : []
+            Card {
+                HStack(spacing: 6) {
+                    Image(systemName: g.status.icon).foregroundStyle(g.status.tint)
+                    Text("Next step").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.secondary)
+                    Spacer()
+                    Text("\(g.sets) × \(g.repLow)–\(g.repHigh)").font(.system(size: 13)).foregroundStyle(Palette.secondary)
+                }
+                Text(Progression.headline(g, kind: kind)).font(.system(size: 22, weight: .bold)).foregroundStyle(g.status.tint).padding(.top, 4)
+                Text(Progression.detail(g, kind: kind)).font(.system(size: 15)).foregroundStyle(Palette.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                HStack {
+                    Text("Last at \(Progression.weightText(g.weight, kind: kind))").foregroundStyle(Palette.secondary)
+                    Spacer()
+                    Text("\(g.lastTotal) of \(g.target) reps").fontWeight(.semibold).monospacedDigit()
+                }
+                .font(.system(size: 13)).padding(.top, 10)
+                ProgressBar(value: g.progress, tint: g.status.tint, height: 6).padding(.top, 2)
+                if points.count + projected.count > 1 {
+                    Chart {
+                        ForEach(points, id: \.offset) { i, p in
+                            BarMark(x: .value("Session", i), y: .value("Reps", p.reps), width: .fixed(14))
+                                .foregroundStyle(p.reps >= g.target ? Palette.orange : Palette.fieldHigh).cornerRadius(3)
+                        }
+                        ForEach(projected, id: \.0) { i, r in
+                            LineMark(x: .value("Session", i), y: .value("Projected", r), series: .value("S", "projection"))
+                                .foregroundStyle(g.status.tint).lineStyle(StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+                        }
+                        RuleMark(y: .value("Target", g.target))
+                            .foregroundStyle(Palette.orange.opacity(0.7)).lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
+                            .annotation(position: .top, alignment: .leading) {
+                                Text("\(g.target) reps moves you up").font(.system(size: 11)).foregroundStyle(Palette.orange)
+                            }
+                    }
+                    .chartXAxis {
+                        AxisMarks(values: points.map(\.offset)) { v in
+                            if let i = v.as(Int.self), i < points.count { AxisValueLabel(Fmt.date(points[i].element.date, "MMMd")) }
+                        }
+                    }
+                    .chartYScale(domain: 0...(Double(g.target) * 1.15))
+                    .chartYAxis { AxisMarks(position: .leading) { AxisGridLine().foregroundStyle(Palette.separator); AxisValueLabel() } }
+                    .frame(height: 140).padding(.top, 12)
+                    Text("Total reps at \(Progression.weightText(g.weight, kind: kind)) each session, each set counted up to \(g.repHigh)")
+                        .font(.system(size: 11)).foregroundStyle(Palette.tertiary)
+                }
+            }
+        }
+    }
+
     private func bodyweightReady(_ all: [Session]) -> some View {
         let last = all.last!
         let entry = last.entry

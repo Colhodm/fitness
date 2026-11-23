@@ -155,6 +155,11 @@ final class WorkoutSession: ObservableObject {
         return pool[i]
     }
 
+    func guidance(_ entry: WorkoutEntry) -> Guidance? {
+        guard let ex = entry.exercise else { return nil }
+        return Progression.guidance(kind: ex.kind, config: ProgressionConfig(entry), sessions: priorSessions(entry))
+    }
+
     func plan(_ entry: WorkoutEntry) -> Plan {
         guard let ex = entry.exercise else { return Plan() }
         return Analytics.plan(kind: ex.kind, config: ProgressionConfig(entry), last: priorSessions(entry).last)

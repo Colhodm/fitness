@@ -162,6 +162,41 @@ struct EntryCard: View {
         .buttonStyle(.plain)
     }
 
+    /// Live double-progression check: how many reps each working set still needs to earn the next weight.
+    @ViewBuilder private var progressLadder: some View {
+        if Progression.repKinds.contains(ex.kind), entry.repHigh > 0 {
+            let p = session.plan(entry)
+            let sets = entry.workingSets
+            let top = entry.repHigh
+            let assisted = ex.kind == .assisted
+            let counts: (SetRecord) -> Bool = { s in assisted ? s.weight <= p.weight + 0.01 : s.weight >= p.weight - 0.01 }
+            let done = sets.filter(\.done)
+            let short = done.filter(counts).reduce(0) { $0 + max(0, top - $1.reps) } + done.filter { !counts($0) }.count * top
+            let next = assisted ? max(0, p.weight - entry.increment) : p.weight + entry.increment
+            let allDone = !sets.isEmpty && done.count == sets.count
+            HStack(spacing: 6) {
+                ForEach(Array(sets.enumerated()), id: \.offset) { _, s in
+                    let hit = s.done && counts(s) && s.reps >= top
+                    Text(s.done ? (hit ? "\(s.reps)" : "−\(max(1, top - (counts(s) ? s.reps : 0)))") : "\(top)")
+                        .font(.system(size: 12, weight: .bold)).monospacedDigit()
+                        .foregroundStyle(hit ? .black : s.done ? Palette.orange : Palette.secondary)
+                        .frame(minWidth: 30).padding(.vertical, 4)
+                        .background(hit ? Palette.orange : Palette.field, in: RoundedRectangle(cornerRadius: 6))
+                }
+                Spacer(minLength: 4)
+                Group {
+                    if done.isEmpty { Text("Hit \(top) on every set to move up") }
+                    else if short == 0 && allDone { Text("Next time: \(Progression.weightText(next, kind: ex.kind))").foregroundColor(Palette.orange) }
+                    else if short == 0 { Text("On track for \(Progression.weightText(next, kind: ex.kind))") }
+                    else { Text("\(short) rep\(short == 1 ? "" : "s") short so far") }
+                }
+                .font(.system(size: 12, weight: .medium)).foregroundStyle(Palette.secondary).lineLimit(1).minimumScaleFactor(0.8)
+            }
+            .padding(.top, 8)
+            .accessibilityElement(children: .combine)
+        }
+    }
+
     private func lastText(_ s: SetRecord) -> String {
         ex.kind == .bodyweight && s.weight == 0 ? "\(s.reps)" : Analytics.setText(s, ex.kind)
     }
@@ -189,6 +224,9 @@ struct EntryCard: View {
             let nextText = ex.kind == .bodyweight && p.weight == 0 ? "adds \(Fmt.wu(inc))" : "starts at \(Fmt.w(next))"
             let sub = p.progressed ? "Up \(Fmt.wu(inc)) from \(Fmt.w(p.lastWeight)) · you hit \(entry.repHigh)+ on every set last time"
                 : "Hit \(entry.repHigh) on every set and next time \(nextText)"
+            if !p.progressed, let g = session.guidance(entry), g.status != .ready, g.status != .tooEasy {
+                return (title, "\(Progression.headline(g, kind: ex.kind)) · \(sub)")
+            }
             return (title, sub)
         case .timed:
             let inc = Int(entry.increment > 0 && entry.increment < 60 ? entry.increment : 10)
@@ -241,6 +279,7 @@ struct EntryCard: View {
                 Spacer(minLength: 0)
             }
             .padding(10).background(Palette.field, in: RoundedRectangle(cornerRadius: 10)).padding(.top, 10)
+            progressLadder
 
             HStack(spacing: 8) {
                 Text("SET").frame(width: 30, alignment: .leading)

@@ -68,6 +68,8 @@ struct Plan {
     var reason = ""
     var setsAtTop = 0
     var setsCounted = 0
+    /// Every set hit the top of the range, but at least one was logged above RPE 9.
+    var heldByRPE = false
 }
 
 enum Analytics {
@@ -230,7 +232,10 @@ enum Analytics {
             let atTop = atWorking.filter { $0.reps >= c.repHigh }.count
             p.setsAtTop = atTop
             p.setsCounted = counted
-            let allHit = atTop >= counted && counted > 0
+            let reachedTop = atTop >= counted && counted > 0
+            let grind = atWorking.contains { $0.rpe > 9 }
+            let allHit = reachedTop && !grind
+            p.heldByRPE = reachedTop && grind
             if allHit {
                 p.progressed = true
                 p.weight = kind == .assisted ? max(0, working - c.increment) : working + c.increment
@@ -240,7 +245,9 @@ enum Analytics {
                 p.weight = working
                 p.reps = (0..<max(1, c.sets)).map { i in i < sets.count ? sets[i].reps : (sets.last?.reps ?? c.repLow) }
                 let logged = atWorking.count
-                if logged < c.sets {
+                if p.heldByRPE {
+                    p.reason = "\(c.repHigh)+ reps but above RPE 9"
+                } else if logged < c.sets {
                     p.reason = "\(logged) of \(c.sets) sets logged"
                 } else {
                     p.reason = "\(counted - atTop) of \(counted) sets under \(c.repHigh)"

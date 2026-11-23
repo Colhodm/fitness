@@ -41,6 +41,7 @@ struct TodayView: View {
                 weekCard
                 stepsCard
                 nextUpCard
+                progressCard
                 recentPRs
             }
         }
@@ -195,6 +196,53 @@ struct TodayView: View {
     }
 
     // MARK: Recent PRs
+    // MARK: Ready to progress
+    private var progressItems: [(ex: Exercise, g: Guidance)] {
+        let cutoff = Calendar.current.date(byAdding: .day, value: -45, to: Date())!
+        var seen = Set<PersistentIdentifier>()
+        var out: [(ex: Exercise, g: Guidance)] = []
+        for w in finished where w.startedAt >= cutoff {
+            for e in w.sortedEntries {
+                guard let ex = e.exercise, Progression.repKinds.contains(ex.kind), seen.insert(ex.persistentModelID).inserted else { continue }
+                let all = Analytics.sessions(ex)
+                guard let last = all.last,
+                      let g = Progression.guidance(kind: ex.kind, config: ProgressionConfig(last.entry), sessions: all),
+                      [.ready, .tooEasy, .stalled].contains(g.status) else { continue }
+                out.append((ex, g))
+            }
+        }
+        return out.sorted { ($0.g.status == .stalled ? 1 : 0) < ($1.g.status == .stalled ? 1 : 0) }
+    }
+
+    @ViewBuilder private var progressCard: some View {
+        let items = Array(progressItems.prefix(5))
+        if !items.isEmpty {
+            Card {
+                Text("Ready to progress").font(.system(size: 17, weight: .semibold)).padding(.bottom, 8)
+                ForEach(Array(items.enumerated()), id: \.element.ex.persistentModelID) { i, item in
+                    if i > 0 { RowDivider() }
+                    Button { router.push(.exercise(item.ex.persistentModelID)) } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: item.g.status.icon).font(.system(size: 20)).foregroundStyle(item.g.status.tint)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(item.ex.name).font(.system(size: 17)).foregroundStyle(.white)
+                                Text(item.g.status == .stalled ? "No rep gains in 3 sessions"
+                                     : "\(item.g.sets) × \(item.g.repHigh)+ at \(Progression.weightText(item.g.weight, kind: item.ex.kind))")
+                                    .font(.system(size: 13)).foregroundStyle(Palette.secondary)
+                            }
+                            Spacer()
+                            Text(item.g.status == .stalled ? "Stalled" : Progression.weightText(item.g.nextWeight, kind: item.ex.kind))
+                                .font(.system(size: 17, weight: .bold)).foregroundStyle(item.g.status.tint).monospacedDigit()
+                            Image(systemName: "chevron.right").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.tertiary)
+                        }
+                        .padding(.vertical, 9).contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
     @ViewBuilder private var recentPRs: some View {
         let cutoff = Calendar.current.date(byAdding: .day, value: -14, to: Date())!
         let prs = finished.filter { $0.startedAt >= cutoff }.prefix(6).flatMap { Analytics.workoutPRs($0) }.prefix(3)
