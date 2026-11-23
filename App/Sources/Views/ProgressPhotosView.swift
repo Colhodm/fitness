@@ -254,6 +254,8 @@ struct PhotoCaptureView: View {
     @State private var takenThisSession: Set<PhotoPose> = []
     @State private var picked: PhotosPickerItem?
     @State private var flash = false
+    @State private var countdownTask: Task<Void, Never>?
+    @State private var saveFailed = false
 
     private var last: ProgressPhoto? { photos.first { $0.pose == pose } }
     private var index: Int { PhotoPose.allCases.firstIndex(of: pose)! }
@@ -288,7 +290,8 @@ struct PhotoCaptureView: View {
         .preferredColorScheme(.dark)
         .statusBarHidden()
         .onAppear { pose = startPose; camera.start() }
-        .onDisappear { camera.stop() }
+        .onDisappear { countdownTask?.cancel(); camera.stop() }
+        .alert("Couldn't save the photo", isPresented: $saveFailed) { Button("OK", role: .cancel) {} } message: { Text("Try taking it again.") }
         .task(id: pose) { outline = nil; if let last { outline = await PhotoStore.outline(last) } }
         .onChange(of: picked) { _, item in
             guard let item else { return }
@@ -400,9 +403,10 @@ struct PhotoCaptureView: View {
     private func shoot() {
         guard timer > 0 else { take(); return }
         countdown = timer
-        Task {
+        countdownTask = Task {
             while countdown > 0 {
                 try? await Task.sleep(for: .seconds(1))
+                if Task.isCancelled { countdown = 0; return }
                 countdown -= 1
             }
             take()
@@ -410,13 +414,18 @@ struct PhotoCaptureView: View {
     }
 
     private func take() {
+        guard camera.state == .ready, camera.session.isRunning else { return }
         flash = true
         withAnimation(.easeOut(duration: 0.3)) { flash = false }
         camera.capture { img in if let img { saved(img) } }
     }
 
     private func saved(_ img: UIImage) {
-        PhotoStore.save(img, pose: pose, context: context)
+        guard PhotoStore.save(img, pose: pose, context: context) != nil else {
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
+            saveFailed = true
+            return
+        }
         PhotoStore.scheduleReminder(context: context)
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         takenThisSession.insert(pose)
