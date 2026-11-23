@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0293B8366297F49EAB1D5B2D /* TreadmillImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C024EC8D7ED70B668D8FDD4 /* TreadmillImportView.swift */; };
 		09D408F4C7CFC2DF2F7FC6E4 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D88D3424F22F50139637F6A /* Components.swift */; };
 		0B6BE6634F8FE5588A52D6B5 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AF596A3556F0CD2532451F /* Palette.swift */; };
 		1178D7F19ABBA803B5AD694A /* RestActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD895B8B4A097249F8B41DED /* RestActivityAttributes.swift */; };
 		1213610CC9011AA0B3FDB376 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 643787374B4F2C16C3606393 /* SettingsView.swift */; };
 		18ED407D9DBF70E47595C34B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD4966F6D10D9993D6B2736 /* RootView.swift */; };
 		1ADE9960B6FE3A1E9656CBB1 /* RestIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F459905F9798B68FD22C53 /* RestIntents.swift */; };
+		1D5FDA719DD378286374E67B /* TreadmillParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053733593C118FEF1680E627 /* TreadmillParser.swift */; };
 		2AABB707DB98FD95FFC07B0A /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5096126665B315AA0697FF2F /* HealthKit.framework */; };
 		31475ECE597C0CBC4F58C677 /* WorkoutSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCFC8B00EB3BE6AE377E5B9 /* WorkoutSummaryView.swift */; };
 		35CBA59C332F3257C936C37C /* LiftRunBodyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE5131A8D2DB2BF0703FF6C /* LiftRunBodyApp.swift */; };
@@ -84,7 +86,9 @@
 
 /* Begin PBXFileReference section */
 		04559C0D99FA981A3EBCEBBF /* ActiveWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveWorkoutView.swift; sourceTree = "<group>"; };
+		053733593C118FEF1680E627 /* TreadmillParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreadmillParser.swift; sourceTree = "<group>"; };
 		0544C62C62DE7A206B7E4694 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1C024EC8D7ED70B668D8FDD4 /* TreadmillImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreadmillImportView.swift; sourceTree = "<group>"; };
 		1CE5131A8D2DB2BF0703FF6C /* LiftRunBodyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftRunBodyApp.swift; sourceTree = "<group>"; };
 		1D46AFF5C96B0E49E26CA963 /* PhotoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStore.swift; sourceTree = "<group>"; };
 		1D88D3424F22F50139637F6A /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
@@ -191,6 +195,7 @@
 				71C146BFF0F40208DED1EC96 /* SetKeypad.swift */,
 				643787374B4F2C16C3606393 /* SettingsView.swift */,
 				B97E0D74DAC8FC58ECE3BE14 /* TodayView.swift */,
+				1C024EC8D7ED70B668D8FDD4 /* TreadmillImportView.swift */,
 				8BE58B0475D69BF0F9096CE8 /* TrendsView.swift */,
 				1FCFC8B00EB3BE6AE377E5B9 /* WorkoutSummaryView.swift */,
 				67DA3461914F5807E570291C /* WrappedView.swift */,
@@ -232,6 +237,7 @@
 				1D46AFF5C96B0E49E26CA963 /* PhotoStore.swift */,
 				C159F8BAE6F0C553B6CCF673 /* RestTimer.swift */,
 				EEF5254BD6DE7D62847F23D1 /* SampleData.swift */,
+				053733593C118FEF1680E627 /* TreadmillParser.swift */,
 				6A5C63A99C73A3D30B5FA478 /* WidgetSync.swift */,
 				B306F69AFFEFD24EE8CF9CBD /* WorkoutSession.swift */,
 				8B17020A2254CC726B1DC996 /* Wrapped.swift */,
@@ -429,6 +435,8 @@
 				F91DB65792D6F2338416A107 /* SetKeypad.swift in Sources */,
 				1213610CC9011AA0B3FDB376 /* SettingsView.swift in Sources */,
 				71665C5212EAA70363281DAF /* TodayView.swift in Sources */,
+				0293B8366297F49EAB1D5B2D /* TreadmillImportView.swift in Sources */,
+				1D5FDA719DD378286374E67B /* TreadmillParser.swift in Sources */,
 				F4058BE5EFD9FE44BCC54257 /* TrendsView.swift in Sources */,
 				406B3E1EDDB22C129C5C607A /* WidgetSnapshot.swift in Sources */,
 				F0A90042495262A7ED995C97 /* WidgetSync.swift in Sources */,

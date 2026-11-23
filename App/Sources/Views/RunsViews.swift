@@ -22,12 +22,18 @@ struct RunsListView: View {
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var router: Router
     @Query private var tags: [RunTag]
+    @State private var showTreadmill = false
 
     var body: some View {
         Screen {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Runs").font(.system(size: 34, weight: .bold))
-                if !health.runs.isEmpty { Text("Synced from Apple Health").font(.system(size: 13)).foregroundStyle(Palette.secondary) }
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Runs").font(.system(size: 34, weight: .bold))
+                    if !health.runs.isEmpty { Text("Synced from Apple Health").font(.system(size: 13)).foregroundStyle(Palette.secondary) }
+                }
+                Spacer()
+                CircleIconButton(system: "camera.viewfinder", tint: Palette.cyan) { showTreadmill = true }
+                    .accessibilityLabel("Log treadmill session from photo")
             }
             .padding(.top, 8)
             if health.runs.isEmpty {
@@ -47,8 +53,32 @@ struct RunsListView: View {
                     }
                 }
             }
+            if !health.walks.isEmpty {
+                Text("Walks · last 30 days · \(Fmt.fixed(recentWalks.reduce(0) { $0 + Units.runDisplay($1.meters) }, 1)) \(Units.runLabel)")
+                    .font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.secondary).padding(.horizontal, 4).padding(.top, 4)
+                Card(padding: 0) {
+                    ForEach(Array(health.walks.prefix(8).enumerated()), id: \.element.id) { i, walk in
+                        if i > 0 { RowDivider(inset: 16) }
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("\(Fmt.runDist(walk.meters, decimals: 2)) \(Units.runLabel) walk").font(.system(size: 17, weight: .semibold))
+                                Text("\(Fmt.date(walk.start, "EEEMMMd")) · \(walk.source)").font(.system(size: 13)).foregroundStyle(Palette.secondary)
+                            }
+                            Spacer()
+                            Text(Fmt.duration(walk.duration)).font(.system(size: 15)).monospacedDigit().foregroundStyle(Palette.secondary)
+                        }
+                        .padding(.horizontal, 16).padding(.vertical, 12)
+                    }
+                }
+            }
         }
         .toolbar(.hidden, for: .navigationBar)
+        .sheet(isPresented: $showTreadmill) { TreadmillImportView() }
+    }
+
+    private var recentWalks: [RunSummary] {
+        let since = Date().addingTimeInterval(-30 * 86400)
+        return health.walks.filter { $0.start >= since }
     }
 
     private var weeks: [(start: Date, runs: [RunSummary])] {

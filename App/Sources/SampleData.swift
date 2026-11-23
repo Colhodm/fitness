@@ -19,6 +19,8 @@ struct SampleHealth {
     var bodyFat: [BodySample] = []
     var lean: [BodySample] = []
     var runs: [RunSummary] = []
+    var walks: [RunSummary] = []
+    var steps: [DaySteps] = []
     private var paces: [UUID: [Double]] = [:]
 
     static var isEnabled: Bool {
@@ -83,6 +85,11 @@ struct SampleHealth {
                                          avgHR: 140 + (pace < 480 ? 14 : 8) + rng.range(-3, 3), source: "Apple Watch"))
                 s.paces[id] = splits
             }
+        }
+        for i in (0..<120).reversed() {
+            let day = cal.date(byAdding: .day, value: -i, to: cal.startOfDay(for: now))!
+            let full = 6_500 + rng.range(0, 7_500) + (s.runs.contains { cal.isDate($0.start, inSameDayAs: day) } ? 5_000 : 0)
+            s.steps.append(DaySteps(date: day, count: (i == 0 ? full * 0.55 : full).rounded()))
         }
         return s
     }

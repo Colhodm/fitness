@@ -44,6 +44,7 @@ final class AppSettings: ObservableObject {
     /// Minutes after midnight.
     @Published var photoReminderMinutes: Int { didSet { d.set(photoReminderMinutes, forKey: "photoReminderMinutes") } }
     @Published var wrappedSeenYear: Int { didSet { d.set(wrappedSeenYear, forKey: "wrappedSeenYear") } }
+    @Published var dailyStepGoal: Int { didSet { d.set(dailyStepGoal, forKey: "dailyStepGoal") } }
 
     init() {
         d.register(defaults: [
@@ -54,7 +55,7 @@ final class AppSettings: ObservableObject {
             "upperIncrement": 5.0, "lowerIncrement": 10.0,
             "weeklyLiftGoal": 4, "weeklyRunGoal": 15.0, "goalWeight": 0.0, "goalRate": -0.5,
             "onboardingDone": false,
-            "photoLock": false, "photoBackup": false, "photoReminderWeeks": 2, "photoReminderMinutes": 480, "wrappedSeenYear": 0,
+            "photoLock": false, "photoBackup": false, "photoReminderWeeks": 2, "photoReminderMinutes": 480, "wrappedSeenYear": 0, "dailyStepGoal": 8000,
         ])
         unit = WeightUnit(rawValue: d.string(forKey: "unit") ?? "lb") ?? .lb
         barWeightLb = d.double(forKey: "barWeightLb")
@@ -80,6 +81,7 @@ final class AppSettings: ObservableObject {
         photoReminderWeeks = d.integer(forKey: "photoReminderWeeks")
         photoReminderMinutes = d.integer(forKey: "photoReminderMinutes")
         wrappedSeenYear = d.integer(forKey: "wrappedSeenYear")
+        dailyStepGoal = d.integer(forKey: "dailyStepGoal")
     }
 
     static let allPlatesLb: [Double] = [45, 35, 25, 10, 5, 2.5]

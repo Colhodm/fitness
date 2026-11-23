@@ -64,6 +64,7 @@ struct SettingsView: View {
             Section("Goals") {
                 Stepper("Lifting: \(settings.weeklyLiftGoal) sessions / week", value: $settings.weeklyLiftGoal, in: 1...7)
                 Stepper("Running: \(Fmt.num(settings.weeklyRunGoal)) mi / week", value: $settings.weeklyRunGoal, in: 0...100, step: 1)
+                Stepper("Steps: \(settings.dailyStepGoal.formatted()) / day", value: $settings.dailyStepGoal, in: 1000...30000, step: 500)
                 Stepper(value: $settings.goalWeight, in: 0...400, step: 1) {
                     HStack { Text("Goal weight"); Spacer(); Text(settings.goalWeight > 0 ? Fmt.wu(settings.goalWeight) : "None").foregroundStyle(Palette.secondary) }
                 }

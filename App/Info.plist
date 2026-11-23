@@ -42,7 +42,7 @@
 	<key>NSHealthShareUsageDescription</key>
 	<string>Reads weight and body composition from your scale (e.g. Renpho), and runs with routes, distance and heart rate.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Saves your lifting sessions as strength training workouts and manual weigh-ins to Apple Health.</string>
+	<string>Saves your lifting sessions as strength training workouts, treadmill runs and walks you log from a photo, and manual weigh-ins to Apple Health.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>UIDesignRequiresCompatibility</key>

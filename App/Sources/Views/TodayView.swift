@@ -1,3 +1,4 @@
+import Charts
 import SwiftData
 import SwiftUI
 
@@ -38,6 +39,7 @@ struct TodayView: View {
             } else {
                 trendCard
                 weekCard
+                stepsCard
                 nextUpCard
                 recentPRs
             }
@@ -111,6 +113,34 @@ struct TodayView: View {
                 StatColumn(label: "PRs", value: "\(prs)")
             }
             .padding(.top, 16)
+        }
+    }
+
+    // MARK: Steps
+    @ViewBuilder private var stepsCard: some View {
+        if let today = health.steps.last, Calendar.current.isDateInToday(today.date) {
+            let week = Array(health.steps.suffix(7))
+            let avg = week.reduce(0) { $0 + $1.count } / Double(max(1, week.count))
+            let goal = Double(settings.dailyStepGoal)
+            Card {
+                CardTitle(title: "Steps", trailing: "Apple Health")
+                goalRow("Today", value: Int(today.count).formatted(), goal: "/ \(settings.dailyStepGoal.formatted())",
+                        progress: today.count / max(1, goal), tint: Palette.yellow)
+                Chart(week) { d in
+                    BarMark(x: .value("Day", d.date, unit: .day), y: .value("Steps", d.count))
+                        .foregroundStyle(d.count >= goal ? Palette.yellow : Palette.yellow.opacity(0.35))
+                        .cornerRadius(3)
+                    RuleMark(y: .value("Goal", goal)).foregroundStyle(Palette.tertiary).lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
+                }
+                .chartXAxis { AxisMarks(values: .stride(by: .day)) { _ in AxisValueLabel(format: .dateTime.weekday(.narrow)) } }
+                .chartYAxis(.hidden)
+                .frame(height: 70).padding(.top, 12)
+                HStack {
+                    StatColumn(label: "7-day avg", value: Int(avg).formatted())
+                    StatColumn(label: "Goal days", value: "\(week.filter { $0.count >= goal }.count) / \(week.count)")
+                }
+                .padding(.top, 12)
+            }
         }
     }
 

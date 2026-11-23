@@ -22,6 +22,12 @@ struct RunSummary: Identifiable, Hashable {
     var secondsPerUnit: Double { meters > 0 ? duration / Units.runDisplay(meters) : 0 }
 }
 
+struct DaySteps: Identifiable, Hashable {
+    var date: Date
+    var count: Double
+    var id: Date { date }
+}
+
 struct RoutePoint: Hashable {
     var latitude: Double
     var longitude: Double
@@ -55,6 +61,9 @@ final class HealthStore: ObservableObject {
     @Published private(set) var bodyFat: [BodySample] = []
     @Published private(set) var lean: [BodySample] = []
     @Published private(set) var runs: [RunSummary] = []
+    @Published private(set) var walks: [RunSummary] = []
+    /// Daily totals, oldest first.
+    @Published private(set) var steps: [DaySteps] = []
     @Published private(set) var access: HealthAccess = .notRequested
     @Published private(set) var isLoading = false
     @Published private(set) var lastRefresh: Date?
@@ -71,8 +80,10 @@ final class HealthStore: ObservableObject {
         HKQuantityType(.bodyMass), HKQuantityType(.bodyFatPercentage), HKQuantityType(.leanBodyMass),
         HKObjectType.workoutType(), HKSeriesType.workoutRoute(),
         HKQuantityType(.distanceWalkingRunning), HKQuantityType(.heartRate), HKQuantityType(.activeEnergyBurned),
+        HKQuantityType(.stepCount),
     ]
-    private let shareTypes: Set<HKSampleType> = [HKObjectType.workoutType(), HKQuantityType(.bodyMass)]
+    private let shareTypes: Set<HKSampleType> = [HKObjectType.workoutType(), HKQuantityType(.bodyMass),
+                                                 HKQuantityType(.distanceWalkingRunning), HKQuantityType(.activeEnergyBurned)]
 
     init() {
         if !HKHealthStore.isHealthDataAvailable() { access = .unavailable }
@@ -116,6 +127,8 @@ final class HealthStore: ObservableObject {
             bodyFat = sample.bodyFat
             lean = sample.lean
             runs = sample.runs.sorted { $0.start > $1.start }
+            walks = sample.walks.sorted { $0.start > $1.start }
+            steps = sample.steps
             lastRefresh = Date()
             return
         }
@@ -126,12 +139,20 @@ final class HealthStore: ObservableObject {
         }
         isLoading = true
         defer { isLoading = false }
+        // Ask again when a newer version needs types the user hasn't seen yet (steps, treadmill writes).
+        if (try? await store.statusForAuthorizationRequest(toShare: shareTypes, read: readTypes)) == .shouldRequest {
+            try? await store.requestAuthorization(toShare: shareTypes, read: readTypes)
+        }
         let since = Calendar.current.date(byAdding: .year, value: -2, to: Date())!
         async let w = quantity(.bodyMass, unit: .pound(), since: since)
         async let f = quantity(.bodyFatPercentage, unit: .percent(), since: since)
         async let l = quantity(.leanBodyMass, unit: .pound(), since: since)
         async let r = fetchRuns(since: since)
+        async let wk = fetchRuns(since: since, activity: .walking)
+        async let st = dailySteps(days: 120)
         let (ws, fs, ls, rs) = await (w, f, l, r)
+        walks = await wk
+        steps = await st
         weights = (ws + manual).sorted { $0.date < $1.date }
         bodyFat = fs
         lean = ls
@@ -158,9 +179,24 @@ final class HealthStore: ObservableObject {
         raw.lowercased().contains("renpho") ? "Renpho" : raw
     }
 
-    private func fetchRuns(since: Date) async -> [RunSummary] {
+    private func dailySteps(days: Int) async -> [DaySteps] {
+        let cal = Calendar.current
+        let start = cal.date(byAdding: .day, value: -days, to: cal.startOfDay(for: Date()))!
+        let type = HKQuantityType(.stepCount)
+        let query = HKStatisticsCollectionQueryDescriptor(
+            predicate: .quantitySample(type: type, predicate: HKQuery.predicateForSamples(withStart: start, end: nil)),
+            options: .cumulativeSum, anchorDate: start, intervalComponents: DateComponents(day: 1))
+        guard let collection = try? await query.result(for: store) else { return [] }
+        var out: [DaySteps] = []
+        collection.enumerateStatistics(from: start, to: Date()) { s, _ in
+            out.append(DaySteps(date: s.startDate, count: s.sumQuantity()?.doubleValue(for: .count()) ?? 0))
+        }
+        return out
+    }
+
+    private func fetchRuns(since: Date, activity: HKWorkoutActivityType = .running) async -> [RunSummary] {
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            HKQuery.predicateForWorkouts(with: .running), HKQuery.predicateForSamples(withStart: since, end: nil)])
+            HKQuery.predicateForWorkouts(with: activity), HKQuery.predicateForSamples(withStart: since, end: nil)])
         let descriptor = HKSampleQueryDescriptor(predicates: [.workout(predicate)], sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)])
         guard let workouts = try? await descriptor.result(for: store) else { return [] }
         var map: [UUID: HKWorkout] = [:]
@@ -175,7 +211,7 @@ final class HealthStore: ObservableObject {
             return RunSummary(id: w.uuid, start: w.startDate, end: w.endDate, duration: w.duration, meters: meters, avgHR: hr,
                               source: Self.deviceName(w))
         }
-        hkWorkouts = map
+        hkWorkouts.merge(map) { _, new in new }
         return result
     }
 
@@ -317,6 +353,43 @@ final class HealthStore: ObservableObject {
             return true
         } catch {
             print("Saving workout failed: \(error)")
+            return false
+        }
+    }
+
+    /// Saves an indoor run or walk (e.g. read off a treadmill screen) with its distance and calories.
+    func saveCardio(walk: Bool, start: Date, duration: TimeInterval, meters: Double, kcal: Double) async -> Bool {
+        let end = start.addingTimeInterval(duration)
+        #if DEBUG
+        if sample != nil {
+            let r = RunSummary(id: UUID(), start: start, end: end, duration: duration, meters: meters, avgHR: nil, source: "Treadmill")
+            if walk { sample!.walks.append(r) } else { sample!.runs.append(r) }
+            await refresh()
+            return true
+        }
+        #endif
+        guard access == .requested, store.authorizationStatus(for: .workoutType()) == .sharingAuthorized else { return false }
+        let config = HKWorkoutConfiguration()
+        config.activityType = walk ? .walking : .running
+        config.locationType = .indoor
+        let builder = HKWorkoutBuilder(healthStore: store, configuration: config, device: .local())
+        do {
+            try await builder.beginCollection(at: start)
+            var samples: [HKSample] = []
+            if meters > 0, store.authorizationStatus(for: HKQuantityType(.distanceWalkingRunning)) == .sharingAuthorized {
+                samples.append(HKQuantitySample(type: HKQuantityType(.distanceWalkingRunning), quantity: HKQuantity(unit: .meter(), doubleValue: meters), start: start, end: end))
+            }
+            if kcal > 0, store.authorizationStatus(for: HKQuantityType(.activeEnergyBurned)) == .sharingAuthorized {
+                samples.append(HKQuantitySample(type: HKQuantityType(.activeEnergyBurned), quantity: HKQuantity(unit: .kilocalorie(), doubleValue: kcal), start: start, end: end))
+            }
+            if !samples.isEmpty { try await builder.addSamples(samples) }
+            try await builder.addMetadata([HKMetadataKeyWorkoutBrandName: "Lift + Run + Body", HKMetadataKeyIndoorWorkout: true])
+            try await builder.endCollection(at: end)
+            _ = try await builder.finishWorkout()
+            await refresh()
+            return true
+        } catch {
+            print("Saving cardio failed: \(error)")
             return false
         }
     }
