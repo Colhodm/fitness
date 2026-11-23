@@ -45,9 +45,10 @@ enum TreadmillParser {
     static func parse(_ items: [Item]) -> TreadmillReading {
         var r = TreadmillReading()
         let all = items.map { $0.text.lowercased() }.joined(separator: " ")
-        if all.range(of: #"\bkm\b|kilomet"#, options: .regularExpression) != nil,
-           all.range(of: #"\b(mi|miles?|mph)\b"#, options: .regularExpression) == nil { r.distanceIsKm = true }
-        else if all.range(of: #"\b(mi|miles?|mph)\b"#, options: .regularExpression) != nil { r.distanceIsKm = false }
+        // Units written after a slash ("min/km", "/mi") are pace units, not the distance unit.
+        let km = all.range(of: #"(?<![a-z/])(km|kilomet)"#, options: .regularExpression) != nil
+        let mi = all.range(of: #"(?<![a-z/])(miles?|mi|mph)(?![a-z])"#, options: .regularExpression) != nil
+        if km != mi { r.distanceIsKm = km }
 
         func center(_ b: CGRect) -> CGPoint { CGPoint(x: b.midX, y: b.midY) }
         // The value for a label: on the same line, else the nearest numeric line (favouring below and right).
