@@ -4,5 +4,5 @@
 //   (developer.apple.com → Account → Membership details). Leave empty to build for the Simulator.
 // BUNDLE_ID_PREFIX: a reverse-DNS prefix you own. App = <prefix>.LiftRunBody,
 //   widgets = <prefix>.LiftRunBody.Widgets, App Group = group.<prefix>.LiftRunBody
-DEVELOPMENT_TEAM =
-BUNDLE_ID_PREFIX = com.example
+DEVELOPMENT_TEAM = 2Y8ATGR3J2
+BUNDLE_ID_PREFIX = com.colhodm
