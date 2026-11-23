@@ -75,7 +75,7 @@ final class WorkoutSession: ObservableObject {
     }
 
     func defaultConfig(for ex: Exercise) -> (ProgressionConfig, Int) {
-        if let lastEntry = Analytics.sessions(ex).last?.entry {
+        if let lastEntry = Analytics.sessions(ex, excluding: workout, before: workout?.startedAt).last?.entry {
             return (ProgressionConfig(lastEntry), lastEntry.restSeconds)
         }
         let s = AppSettings.shared
