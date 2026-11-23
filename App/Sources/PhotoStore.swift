@@ -129,10 +129,13 @@ enum PhotoStore {
 
     // MARK: Lock and reminders
 
+    static var canAuthenticate: Bool { LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) }
+
+    /// Fails when the device has no passcode, so the lock never opens without authenticating.
     static func unlock() async -> Bool {
         let ctx = LAContext()
         var err: NSError?
-        guard ctx.canEvaluatePolicy(.deviceOwnerAuthentication, error: &err) else { return true }
+        guard ctx.canEvaluatePolicy(.deviceOwnerAuthentication, error: &err) else { return false }
         return (try? await ctx.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Unlock your progress photos")) ?? false
     }
 

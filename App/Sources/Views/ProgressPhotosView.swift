@@ -26,7 +26,7 @@ struct ProgressPhotosView: View {
                     .font(.system(size: 13)).foregroundStyle(Palette.secondary)
             }
             if locked {
-                NoticeCard(icon: "faceid", tint: Palette.cyan, title: "Photos are locked", message: "Unlock with Face ID to see your progress photos.",
+                NoticeCard(icon: "faceid", tint: Palette.cyan, title: "Photos are locked", message: PhotoStore.canAuthenticate ? "Unlock with Face ID to see your progress photos." : "Set a passcode on this iPhone to unlock, or turn the lock off in Settings.",
                            actionTitle: "Unlock") { Task { unlocked = await PhotoStore.unlock() } }
             } else {
                 SegmentedPicker(options: PhotoPose.allCases.map { ($0, $0.title) }, selection: $pose)
@@ -467,7 +467,7 @@ struct PhotoCompareView: View {
     var body: some View {
         Screen {
             if settings.photoLock && !unlocked {
-                NoticeCard(icon: "faceid", tint: Palette.cyan, title: "Photos are locked", message: "Unlock with Face ID to compare.",
+                NoticeCard(icon: "faceid", tint: Palette.cyan, title: "Photos are locked", message: PhotoStore.canAuthenticate ? "Unlock with Face ID to compare." : "Set a passcode on this iPhone to unlock, or turn the lock off in Settings.",
                            actionTitle: "Unlock") { Task { unlocked = await PhotoStore.unlock() } }
             } else if let before, let after, photos.count >= 2 {
                 header(before, after)

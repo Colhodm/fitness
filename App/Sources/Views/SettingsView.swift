@@ -72,7 +72,17 @@ struct SettingsView: View {
                 }
             }
             Section("Progress photos") {
-                Toggle("Lock with Face ID", isOn: $settings.photoLock).tint(Palette.cyan)
+                Toggle("Lock with Face ID", isOn: Binding(get: { settings.photoLock }, set: { on in
+                    Task {
+                        // Turning the lock on or off needs Face ID or the passcode; without a passcode it can only be turned off.
+                        if on {
+                            if await PhotoStore.unlock() { settings.photoLock = true }
+                        } else if !PhotoStore.canAuthenticate || (await PhotoStore.unlock()) {
+                            settings.photoLock = false
+                        }
+                    }
+                }))
+                .tint(Palette.cyan)
                 Toggle("Include in iCloud backup", isOn: $settings.photoBackup).tint(Palette.cyan)
                 Picker("Reminder", selection: $settings.photoReminderWeeks) {
                     Text("Off").tag(0)
