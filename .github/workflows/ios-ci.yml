@@ -1,0 +1,42 @@
+name: iOS CI
+
+on:
+  push:
+    paths: &build_paths
+      - 'App/**'
+      - 'Config/**'
+      - 'LiftRunBody.xcodeproj/**'
+      - 'Shared/**'
+      - 'Widgets/**'
+      - 'project.yml'
+      - '.github/workflows/ios-ci.yml'
+  pull_request:
+    paths: *build_paths
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build for iOS Simulator
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build app and widgets
+        run: |
+          xcodebuild -version
+          xcodebuild -quiet \
+            -project LiftRunBody.xcodeproj \
+            -scheme LiftRunBody \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            ARCHS="$(uname -m)" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
